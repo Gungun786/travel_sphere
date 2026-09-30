@@ -31,6 +31,7 @@ interface TripState {
   setCurrentTrip: (id: string) => void;
   getCurrentTrip: () => Trip;
   addTrip: (trip: Trip) => void;
+  updateTrip: (trip: Trip) => void;
   setDraftTrip: (draft: Partial<Trip> | null) => void;
   setDraftMembers: (members: Member[]) => void;
   addDraftMember: (m: Member) => void;
@@ -68,6 +69,15 @@ export const useTripStore = create<TripState>((set, get) => ({
       draftTrip: null,
       draftMembers: mockMembers,
     })),
+    updateTrip: (trip) =>
+  set((s) => ({
+    trips: s.trips.map((existing) =>
+      existing.id === trip.id ? trip : existing
+    ),
+    currentTripId: trip.id,
+    draftTrip: null,
+    draftMembers: mockMembers,
+  })),
   setDraftTrip: (draft) => set({ draftTrip: draft }),
   setDraftMembers: (members) => set({ draftMembers: members }),
   addDraftMember: (m) =>
