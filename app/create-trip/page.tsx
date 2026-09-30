@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Check,
@@ -41,6 +41,13 @@ const accommodations: Accommodation[] = ['Budget', 'Mid-range', 'Premium'];
 export default function CreateTrip() {
   const router = useRouter();
   const addTrip = useTripStore((s) => s.addTrip);
+  const updateTrip = useTripStore((s) => s.updateTrip);
+const trips = useTripStore((s) => s.trips);
+const [editId, setEditId] = useState<string | null>(null);
+
+const editingTrip = editId
+  ? trips.find((trip) => trip.id === editId)
+  : undefined;
 
   const [step, setStep] = useState(0);
   const [name, setName] = useState('Summer Escape');
@@ -63,6 +70,42 @@ export default function CreateTrip() {
     activities: 8000,
   });
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+  const id = new URLSearchParams(window.location.search).get('edit');
+  setEditId(id);
+}, []);
+
+useEffect(() => {
+  if (!editingTrip) return;
+
+  setName(editingTrip.name);
+  setDestination(editingTrip.destinationName);
+  setDecideLater(false);
+  setStartDate(editingTrip.startDate);
+  setEndDate(editingTrip.endDate);
+  setTravelers(editingTrip.members.length);
+  setMembers(editingTrip.members);
+
+  setPrefs(
+    Object.fromEntries(
+      editingTrip.members.map((member) => [
+        member.id,
+        {
+          style: member.travelStyle,
+          interests: member.interests,
+          food: member.food,
+          acc: member.accommodation,
+        },
+      ])
+    )
+  );
+
+  setBudget((current) => ({
+    ...current,
+    total: editingTrip.budget,
+    perPerson: editingTrip.perPerson,
+  }));
+}, [editingTrip?.id]);
 
   const next = () => setStep((s) => Math.min(s + 1, steps.length - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
@@ -116,7 +159,7 @@ export default function CreateTrip() {
     );
 
     const trip: Trip = {
-      id: 'trip-' + Date.now(),
+     id: editingTrip?.id ?? 'trip-' + Date.now(),
       name,
       destinationName: chosenDestination,
       destinationId: dest?.id ?? null,
@@ -136,19 +179,18 @@ export default function CreateTrip() {
       travelStyle:
         prefs[members[0]?.id]?.style ?? 'Relaxed',
       members,
-      createdAt: new Date().toISOString().slice(0, 10),
+      createdAt:
+  editingTrip?.createdAt ??
+  new Date().toISOString().slice(0, 10),
     };
 
     addTrip(trip);
 
-    if (optimization) {
-      toast.success(
-        `${optimization.chosen} selected by TravelSphere AI.`
-      );
-      toast.info(optimization.explanation);
-    } else {
-      toast.success('Trip created successfully.');
-    }
+   if (editingTrip) {
+  updateTrip(trip);
+} else {
+  addTrip(trip);
+}
 
     router.push(`/trip/${trip.id}`);
   } catch (error) {
@@ -164,7 +206,7 @@ export default function CreateTrip() {
 
   return (
     <AppShell>
-      <Header title="Create a Trip" />
+     <Header title={editingTrip ? 'Edit Trip' : 'Create a Trip'} />
       <main className="flex-1 px-4 pb-24 pt-6 md:px-8 lg:pb-10">
         {/* Progress */}
         <div className="mx-auto max-w-3xl">
@@ -448,7 +490,13 @@ export default function CreateTrip() {
               </div>
 
               <Button onClick={handleCreate} className="mt-8 w-full gap-2" size="lg" disabled={loading}>
-                {loading ? 'Creating trip…' : (<>Create Trip <ArrowRight className="h-4 w-4" /></>)}
+                {loading
+  ? (editingTrip ? 'Saving changes…' : 'Creating trip…')
+  : (editingTrip ? (
+    <>Save Changes <ArrowRight className="h-4 w-4" /></>
+  ) : (
+    <>Create Trip <ArrowRight className="h-4 w-4" /></>
+  ))}
               </Button>
             </Card>
           )}
