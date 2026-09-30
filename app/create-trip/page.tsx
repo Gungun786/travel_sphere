@@ -26,6 +26,7 @@ import { PreferenceCard } from '@/components/trip/PreferenceCard';
 import { mockDestinations } from '@/data/mockDestinations';
 import { mockMembers } from '@/data/mockMembers';
 import { useTripStore } from '@/store/tripStore';
+import { optimizeStoredTrip } from '@/lib/api';
 import { toast } from 'sonner';
 import type { Trip, Member, TravelStyle, Interest, FoodPref, Accommodation } from '@/types';
 import { formatINR } from '@/components/trip/shared';
@@ -95,33 +96,71 @@ export default function CreateTrip() {
     });
   };
 
-  const handleCreate = () => {
-    setLoading(true);
-    setTimeout(() => {
-      const dest = mockDestinations.find((d) => d.name === destination);
-      const trip: Trip = {
-        id: 'trip-' + Date.now(),
-        name,
-        destinationName: destination || 'To be decided',
-        destinationId: dest?.id ?? null,
-        image: dest?.image ?? 'https://images.pexels.com/photos/1603650/pexels-photo-1603650.jpeg?auto=compress&cs=tinysrgb&w=1200',
-        startDate: startDate || '2026-06-01',
-        endDate: endDate || '2026-06-05',
-        days: 4,
-        travelers: members.length,
-        budget: budget.total,
-        perPerson: Math.round(budget.total / Math.max(members.length, 1)),
-        progress: 35,
-        status: 'planning',
-        travelStyle: prefs[members[0]?.id]?.style ?? 'Relaxed',
-        members,
-        createdAt: new Date().toISOString().slice(0, 10),
-      };
-      addTrip(trip);
+  const handleCreate = async () => {
+  setLoading(true);
+
+  try {
+    const optimization =
+      decideLater || !destination ? await optimizeStoredTrip() : null;
+
+    const chosenDestination = optimization?.chosen ?? destination;
+
+    if (!chosenDestination) {
+      throw new Error(
+        'Please select a destination or choose "decide later".'
+      );
+    }
+
+    const dest = mockDestinations.find(
+      (d) => d.name === chosenDestination
+    );
+
+    const trip: Trip = {
+      id: 'trip-' + Date.now(),
+      name,
+      destinationName: chosenDestination,
+      destinationId: dest?.id ?? null,
+      image:
+        dest?.image ??
+        'https://images.pexels.com/photos/1603650/pexels-photo-1603650.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      startDate: startDate || '2026-06-01',
+      endDate: endDate || '2026-06-05',
+      days: 4,
+      travelers: members.length,
+      budget: budget.total,
+      perPerson: Math.round(
+        budget.total / Math.max(members.length, 1)
+      ),
+      progress: 35,
+      status: 'planning',
+      travelStyle:
+        prefs[members[0]?.id]?.style ?? 'Relaxed',
+      members,
+      createdAt: new Date().toISOString().slice(0, 10),
+    };
+
+    addTrip(trip);
+
+    if (optimization) {
+      toast.success(
+        `${optimization.chosen} selected by TravelSphere AI.`
+      );
+      toast.info(optimization.explanation);
+    } else {
       toast.success('Trip created successfully.');
-      router.push(`/trip/${trip.id}`);
-    }, 800);
-  };
+    }
+
+    router.push(`/trip/${trip.id}`);
+  } catch (error) {
+    toast.error(
+      error instanceof Error
+        ? error.message
+        : 'Could not connect to the TravelSphere backend.'
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <AppShell>
