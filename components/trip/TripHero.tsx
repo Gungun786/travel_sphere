@@ -30,9 +30,14 @@ export function TripHero({ trip, active }: { trip: Trip; active: string }) {
               <Button size="sm" variant="secondary" className="gap-1.5">
                 <Share2 className="h-3.5 w-3.5" /> Share
               </Button>
-              <Button size="sm" className="gap-1.5 bg-white/10 text-white hover:bg-white/20">
-                <Pencil className="h-3.5 w-3.5" /> Edit Trip
-              </Button>
+              <Link href={`/create-trip?edit=${trip.id}`}>
+  <Button
+    size="sm"
+    className="gap-1.5 bg-white/10 text-white hover:bg-white/20"
+  >
+    <Pencil className="h-3.5 w-3.5" /> Edit Trip
+  </Button>
+</Link>
             </div>
           </div>
         </div>
