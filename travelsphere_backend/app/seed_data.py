@@ -17,6 +17,9 @@ destinations = [
     Destination(name="Goa", cost=15000, avail_start=156, avail_end=166, tags="beach,nightlife"),
     Destination(name="Manali", cost=18000, avail_start=163, avail_end=176, tags="mountain,adventure"),
     Destination(name="Kerala", cost=20000, avail_start=152, avail_end=161, tags="nature,culture,beach"),
+    Destination(name="Jaipur", cost=18000, avail_start=274, avail_end=365, tags="Historical,Food,Shopping"),
+    Destination(name="Rishikesh", cost=16000, avail_start=60, avail_end=151, tags="Trekking,Mountains,Wildlife"),
+    Destination(name="Meghalaya", cost=22000, avail_start=1, avail_end=90, tags="Trekking,Mountains,Wildlife"),
 ]
 
 db.add_all(travelers)

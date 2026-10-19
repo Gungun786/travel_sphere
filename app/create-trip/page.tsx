@@ -324,7 +324,8 @@ useEffect(() => {
                       type="button"
                       variant={decideLater ? 'default' : 'outline'}
                       onClick={() => { setDecideLater(true); setDestination(''); }}
-                      className="gap-2"
+                      aria-pressed={decideLater}
+                      className={`gap-2 ${decideLater ? 'ring-2 ring-ocean ring-offset-2' : ''}`}
                     >
                       <MapPin className="h-4 w-4" />
                       {decideLater ? 'Will decide later' : 'Help me decide later'}
@@ -528,7 +529,10 @@ useEffect(() => {
 
               <div className="mt-6 space-y-4">
                 <SummaryRow label="Trip name" value={name} />
-                <SummaryRow label="Destination" value={destination || 'To be decided'} />
+                <SummaryRow
+                  label="Destination"
+                  value={decideLater ? 'To be decided' : destination || 'Not selected'}
+                />
                 <SummaryRow label="Dates" value={`${startDate || '—'} → ${endDate || '—'}`} />
                 <SummaryRow label="Travelers" value={`${members.length} people`} />
                 <SummaryRow label="Total budget" value={formatINR(budget.total)} />
