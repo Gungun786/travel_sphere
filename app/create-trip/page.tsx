@@ -26,7 +26,10 @@ import { PreferenceCard } from '@/components/trip/PreferenceCard';
 import { mockDestinations } from '@/data/mockDestinations';
 import { mockMembers } from '@/data/mockMembers';
 import { useTripStore } from '@/store/tripStore';
-import { optimizeStoredTrip } from '@/lib/api';
+import {
+  optimizeTrip,
+  type OptimizeRequest,
+} from '@/lib/api';
 import { toast } from 'sonner';
 import type { Trip, Member, TravelStyle, Interest, FoodPref, Accommodation } from '@/types';
 import { formatINR } from '@/components/trip/shared';
@@ -140,11 +143,68 @@ useEffect(() => {
   };
 
   const handleCreate = async () => {
+  if (members.length === 0) {
+    toast.error('Add at least one traveler before creating a trip.');
+    return;
+  }
+
   setLoading(true);
 
   try {
+    const toDayNumber = (
+      value: string,
+      fallback: number
+    ): number => {
+      const [year, month, day] = value.split('-').map(Number);
+
+      if (![year, month, day].every(Number.isInteger)) {
+        return fallback;
+      }
+
+      const date = new Date(Date.UTC(year, month - 1, day));
+      const startOfYear = new Date(Date.UTC(year, 0, 1));
+
+      return Math.floor(
+        (date.getTime() - startOfYear.getTime()) / 86400000
+      ) + 1;
+    };
+
+    const dateStart = toDayNumber(startDate, 1);
+    const dateEndValue = toDayNumber(endDate, 365);
+    const dateEnd =
+      endDate && dateEndValue < dateStart
+        ? dateEndValue + 365
+        : dateEndValue;
+
+    const travelerNameCounts: Record<string, number> = {};
+    const optimizePayload: OptimizeRequest = {
+      travelers: Object.fromEntries(
+        members.map((member) => {
+          const preference = prefs[member.id];
+          const count = (travelerNameCounts[member.name] ?? 0) + 1;
+          travelerNameCounts[member.name] = count;
+          const travelerName =
+            count === 1 ? member.name : `${member.name} ${count}`;
+
+          return [
+            travelerName,
+            {
+              budget_max:
+                member.budgetPerPerson || budget.perPerson,
+              date_start: dateStart,
+              date_end: dateEnd,
+              interests:
+                preference?.interests ?? member.interests,
+            },
+          ];
+        })
+      ),
+    };
+
     const optimization =
-      decideLater || !destination ? await optimizeStoredTrip() : null;
+      decideLater || !destination
+        ? await optimizeTrip(optimizePayload)
+        : null;
 
     const chosenDestination = optimization?.chosen ?? destination;
 

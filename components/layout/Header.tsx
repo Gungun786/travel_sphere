@@ -1,11 +1,14 @@
 'use client';
 
 import { Search, Bell } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUserStore } from '@/store/userStore';
 
 export function Header({ title }: { title?: string }) {
   const user = useUserStore((s) => s.user);
+  const { data: session } = useSession();
+  const sessionUser = session?.user;
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-border bg-background/80 px-4 backdrop-blur-md md:px-8">
       <div className="flex items-center gap-3">
@@ -30,17 +33,24 @@ export function Header({ title }: { title?: string }) {
           <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-sunset" />
         </button>
 
-        <div className="flex items-center gap-3">
-          <Avatar className="h-9 w-9">
-            <AvatarFallback className={user?.avatarColor}>
-              {user?.initials}
-            </AvatarFallback>
-          </Avatar>
-          <div className="hidden text-right md:block">
-            <p className="text-sm font-medium leading-tight">{user?.name}</p>
-            <p className="text-xs text-muted-foreground">Traveler</p>
+        {sessionUser ? (
+          <div className="flex items-center gap-3">
+            <Avatar className="h-9 w-9">
+              {sessionUser.image && <AvatarImage src={sessionUser.image} alt={sessionUser.name ?? 'Traveler'} />}
+              <AvatarFallback>{sessionUser.name?.slice(0, 2).toUpperCase() ?? 'TR'}</AvatarFallback>
+            </Avatar>
+            <div className="hidden text-right md:block">
+              <p className="text-sm font-medium leading-tight">{sessionUser.name ?? sessionUser.email}</p>
+              <button onClick={() => signOut({ callbackUrl: '/' })} className="text-xs text-muted-foreground hover:text-foreground">
+                Sign out
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <button onClick={() => signIn('google')} className="text-sm font-medium text-ocean hover:underline">
+            Sign in
+          </button>
+        )}
       </div>
     </header>
   );
