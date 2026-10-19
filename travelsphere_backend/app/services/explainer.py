@@ -32,9 +32,15 @@ In 2-3 friendly sentences, explain why {chosen} was chosen for this group,
 mentioning any budget or date constraints that ruled out other options.
 Be specific and warm, like you're texting the group chat."""
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt,
-    )
+    try:
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt,
+        )
+    except Exception:
+        return (
+            f"{chosen} was selected for the group at a cost of "
+            f"{result['cost']}. It best matches the group's constraints."
+        )
 
     return response.text or "The destination was selected based on the group constraints."

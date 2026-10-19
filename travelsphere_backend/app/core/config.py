@@ -12,3 +12,8 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY is not set in the .env file")
+
+BACKEND_JWT_SECRET = os.getenv("BACKEND_JWT_SECRET")
+
+if not BACKEND_JWT_SECRET:
+    raise ValueError("BACKEND_JWT_SECRET is not set in the .env file")

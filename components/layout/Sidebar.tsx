@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Map, Compass, User, Settings, LogOut, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUserStore } from '@/store/userStore';
+import { signOut } from 'next-auth/react';
 
 const nav = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -56,11 +57,14 @@ export function Sidebar() {
           Settings
         </button>
         <button
-          onClick={logout}
+          onClick={() => {
+            logout();
+            void signOut({ callbackUrl: '/' });
+          }}
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
         >
           <LogOut className="h-4.5 w-4.5" />
-          Logout
+          Sign out
         </button>
       </div>
     </aside>

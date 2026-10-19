@@ -25,3 +25,4 @@ watchfiles==1.2.0
 websockets==16.0
 ortools
 google-genai
+PyJWT

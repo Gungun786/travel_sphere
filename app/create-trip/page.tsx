@@ -143,6 +143,11 @@ useEffect(() => {
   };
 
   const handleCreate = async () => {
+  if (members.length === 0) {
+    toast.error('Add at least one traveler before creating a trip.');
+    return;
+  }
+
   setLoading(true);
 
   try {
@@ -171,13 +176,18 @@ useEffect(() => {
         ? dateEndValue + 365
         : dateEndValue;
 
+    const travelerNameCounts: Record<string, number> = {};
     const optimizePayload: OptimizeRequest = {
       travelers: Object.fromEntries(
         members.map((member) => {
           const preference = prefs[member.id];
+          const count = (travelerNameCounts[member.name] ?? 0) + 1;
+          travelerNameCounts[member.name] = count;
+          const travelerName =
+            count === 1 ? member.name : `${member.name} ${count}`;
 
           return [
-            member.name,
+            travelerName,
             {
               budget_max:
                 member.budgetPerPerson || budget.perPerson,

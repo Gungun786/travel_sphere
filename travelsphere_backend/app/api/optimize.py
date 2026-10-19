@@ -7,6 +7,7 @@ from app.models.destination import Destination
 from app.schemas.optimize import OptimizeRequest, OptimizeResponse
 from app.services.optimizer import solve_group_trip
 from app.services.explainer import generate_explanation
+from app.core.security import get_current_user
 
 router = APIRouter()
 
@@ -60,6 +61,7 @@ def load_database_data(db: Session):
 def optimize(
     payload: OptimizeRequest | None = None,
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
     if payload is None:
         travelers, destinations = load_database_data(db)
