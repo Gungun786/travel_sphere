@@ -15,6 +15,7 @@ export interface OptimizeDestination {
 export interface OptimizeRequest {
   travelers: Record<string, OptimizeTraveler>;
   destinations?: Record<string, OptimizeDestination>;
+  vetoedDestinations?: string[];
 }
 
 interface OptimizeErrorDetail {
@@ -45,6 +46,10 @@ export interface CreateTripRequest {
   budget_total: number;
   optimizer_result: OptimizeResult | null;
   members: CreateTripMember[];
+}
+
+export interface UpdateTripRequest {
+  optimizer_result: OptimizeResult | null;
 }
 
 export interface ApiTripMember extends CreateTripMember {
@@ -145,9 +150,17 @@ function getBackendError(
 export async function optimizeTrip(
   payload?: OptimizeRequest
 ): Promise<OptimizeResult> {
+  const requestPayload = payload
+    ? {
+        ...payload,
+        ...(payload.vetoedDestinations
+          ? { vetoed_destinations: payload.vetoedDestinations }
+          : {}),
+      }
+    : undefined;
   const response = await backendRequest('/api/optimize', {
     method: 'POST',
-    ...(payload ? { body: JSON.stringify(payload) } : {}),
+    ...(requestPayload ? { body: JSON.stringify(requestPayload) } : {}),
   });
 
   const body = (await readBackendBody(response)) as OptimizeResult;
@@ -193,6 +206,21 @@ export async function getTrip(tripId: string): Promise<ApiTrip> {
     const error = new Error(getBackendError(body, response.status));
     (error as Error & { status?: number }).status = response.status;
     throw error;
+  }
+  return body as ApiTrip;
+}
+
+export async function updateTrip(
+  tripId: string,
+  payload: UpdateTripRequest
+): Promise<ApiTrip> {
+  const response = await backendRequest(`/api/trips/${encodeURIComponent(tripId)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
+  const body = await readBackendBody(response);
+  if (!response.ok) {
+    throw new Error(getBackendError(body, response.status));
   }
   return body as ApiTrip;
 }

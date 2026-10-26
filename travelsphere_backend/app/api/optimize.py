@@ -26,6 +26,18 @@ def normalize_values(values: list[str] | set[str]) -> set[str]:
     return normalized
 
 
+def remove_vetoed_destinations(
+    destinations: dict,
+    vetoed_destinations: list[str],
+) -> dict:
+    vetoed = set(vetoed_destinations)
+    return {
+        name: destination
+        for name, destination in destinations.items()
+        if name not in vetoed
+    }
+
+
 def load_database_data(db: Session):
     db_travelers = db.query(Traveler).all()
     db_destinations = db.query(Destination).all()
@@ -88,6 +100,14 @@ def optimize(
             }
         else:
             _, destinations = load_database_data(db)
+
+        destinations = remove_vetoed_destinations(
+            destinations,
+            payload.vetoed_destinations,
+        )
+
+    if payload is None:
+        destinations = remove_vetoed_destinations(destinations, [])
 
     result = solve_group_trip(travelers, destinations)
 

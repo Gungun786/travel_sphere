@@ -16,6 +16,7 @@ import type { Destination } from '@/types';
 import { toast } from 'sonner';
 import { formatINR } from '@/components/trip/shared';
 import { usePersistedTrip } from '@/components/trip/persisted';
+import { optimizeTrip, updateTrip, type OptimizeResult } from '@/lib/api';
 
 const filters = [
   { key: 'budget', label: 'Budget', options: ['Any', 'Budget', 'Mid-range', 'Premium'] },
@@ -45,9 +46,57 @@ export default function DestinationRecommendation() {
   );
   const [compareList, setCompareList] = useState<Destination[]>([]);
   const [showCompare, setShowCompare] = useState(false);
+  const [vetoedDestinations, setVetoedDestinations] = useState<string[]>([]);
+  const [suggestion, setSuggestion] = useState<OptimizeResult | null>(null);
+  const [vetoingTravelerId, setVetoingTravelerId] = useState<string | null>(null);
 
   if (loading) return <PageMessage message="Loading trip…" />;
   if (error || !trip) return <PageMessage message={error?.message ?? 'Trip not found.'} />;
+
+  const suggestedDestination = suggestion ? suggestion.chosen : trip.destinationName;
+  const suggestedDestinationData = mockDestinations.find(
+    (destination) => destination.name === suggestedDestination
+  );
+
+  const toDayNumber = (value: string): number => {
+    const [year, month, day] = value.split('-').map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    const startOfYear = new Date(Date.UTC(year, 0, 1));
+    return Math.floor((date.getTime() - startOfYear.getTime()) / 86400000) + 1;
+  };
+
+  const vetoDestination = async (travelerId: string) => {
+    if (!suggestedDestination || suggestedDestination === 'To be decided') return;
+
+    const nextVetoes = [...vetoedDestinations, suggestedDestination];
+    setVetoingTravelerId(travelerId);
+    try {
+      const nextResult = await optimizeTrip({
+        travelers: Object.fromEntries(
+          trip.members.map((member) => [
+            member.name,
+            {
+              budget_max: member.budgetPerPerson,
+              date_start: toDayNumber(trip.startDate),
+              date_end: toDayNumber(trip.endDate),
+              interests: member.interests,
+            },
+          ])
+        ),
+        vetoedDestinations: nextVetoes,
+      });
+      await updateTrip(params.tripId, { optimizer_result: nextResult });
+      setVetoedDestinations(nextVetoes);
+      setSuggestion(nextResult);
+      if (!nextResult.chosen) {
+        toast.info('There are no remaining destinations that fit your group.');
+      }
+    } catch (reason) {
+      toast.error(reason instanceof Error ? reason.message : 'Could not veto this destination.');
+    } finally {
+      setVetoingTravelerId(null);
+    }
+  };
 
   const toggleCompare = (d: Destination) => {
     setCompareList((list) => {
@@ -75,6 +124,35 @@ export default function DestinationRecommendation() {
             <h1 className="font-display text-2xl font-bold tracking-tight">Find Your Perfect Destination</h1>
             <p className="mt-1 text-muted-foreground">Filter and compare destinations tailored to your group.</p>
           </div>
+
+          {trip.decideLater && suggestedDestinationData && (
+            <Card className="mt-6 p-5">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                <img
+                  src={suggestedDestinationData.image}
+                  alt={suggestedDestinationData.name}
+                  className="h-28 w-full rounded-lg object-cover sm:w-44"
+                />
+                <div className="flex-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Suggested destination</p>
+                  <h2 className="mt-1 font-display text-xl font-semibold">{suggestedDestinationData.name}</h2>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {trip.members.map((member) => (
+                      <Button
+                        key={member.id}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => vetoDestination(member.id)}
+                        disabled={vetoingTravelerId !== null}
+                      >
+                        Veto for {member.name}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          )}
 
           {/* Filters */}
           <Card className="mt-6 p-5">

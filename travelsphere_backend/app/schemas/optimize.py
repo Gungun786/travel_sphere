@@ -16,6 +16,7 @@ class DestinationIn(BaseModel):
 class OptimizeRequest(BaseModel):
     travelers: Dict[str, TravelerIn]
     destinations: Dict[str, DestinationIn] | None = None
+    vetoed_destinations: List[str] = Field(default_factory=list)
 
 class OptimizeResponse(BaseModel):
     chosen: str | None
