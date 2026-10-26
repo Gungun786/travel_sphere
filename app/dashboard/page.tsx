@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   Plus,
@@ -17,21 +17,32 @@ import { TripCard } from '@/components/trip/TripCard';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/store/userStore';
-import { useTripStore } from '@/store/tripStore';
 import { mockDestinations } from '@/data/mockDestinations';
 import { formatINR } from '@/components/trip/shared';
-
-const stats = [
-  { label: 'Active Trips', value: '2', icon: CalendarClock, tint: 'bg-ocean/10 text-ocean' },
-  { label: 'Upcoming Trips', value: '3', icon: MapPin, tint: 'bg-sunset/15 text-sunset' },
-  { label: 'Group Members', value: '12', icon: Users, tint: 'bg-success/15 text-success' },
-  { label: 'Total Planned Budget', value: '₹1.5L', icon: Wallet, tint: 'bg-chart-4/15 text-chart-4' },
-];
+import { listTrips } from '@/lib/api';
+import { apiTripToTrip } from '@/components/trip/persisted';
+import type { Trip } from '@/types';
 
 export default function Dashboard() {
   const user = useUserStore((s) => s.user);
-  const trips = useTripStore((s) => s.trips);
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<'overview' | 'trips' | 'explore'>('overview');
+
+  useEffect(() => {
+    listTrips()
+      .then((items) => setTrips(items.map(apiTripToTrip)))
+      .catch((reason: unknown) => setError(reason instanceof Error ? reason.message : 'Could not load trips.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const stats = [
+    { label: 'Active Trips', value: String(trips.filter((trip) => trip.status === 'active').length), icon: CalendarClock, tint: 'bg-ocean/10 text-ocean' },
+    { label: 'Upcoming Trips', value: String(trips.filter((trip) => trip.status === 'upcoming' || trip.status === 'planning').length), icon: MapPin, tint: 'bg-sunset/15 text-sunset' },
+    { label: 'Group Members', value: String(trips.reduce((total, trip) => total + trip.members.length, 0)), icon: Users, tint: 'bg-success/15 text-success' },
+    { label: 'Total Planned Budget', value: formatINR(trips.reduce((total, trip) => total + trip.budget, 0)), icon: Wallet, tint: 'bg-chart-4/15 text-chart-4' },
+  ];
 
   return (
     <AppShell>
@@ -52,6 +63,9 @@ export default function Dashboard() {
             </Button>
           </Link>
         </div>
+
+        {loading && <p className="mt-6 text-sm text-muted-foreground">Loading trips…</p>}
+        {error && <p className="mt-6 text-sm text-destructive">{error}</p>}
 
         {/* Stats */}
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

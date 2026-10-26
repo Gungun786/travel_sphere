@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import { X, Check, Star, GitCompare } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Header } from '@/components/layout/Header';
@@ -14,6 +15,7 @@ import { mockDestinations } from '@/data/mockDestinations';
 import type { Destination } from '@/types';
 import { toast } from 'sonner';
 import { formatINR } from '@/components/trip/shared';
+import { usePersistedTrip } from '@/components/trip/persisted';
 
 const filters = [
   { key: 'budget', label: 'Budget', options: ['Any', 'Budget', 'Mid-range', 'Premium'] },
@@ -34,15 +36,18 @@ const compareMetrics = [
 ];
 
 export default function DestinationRecommendation() {
-  const getCurrentTrip = useTripStore((s) => s.getCurrentTrip);
   const selectDestination = useTripStore((s) => s.selectDestination);
-  const trip = getCurrentTrip();
+  const params = useParams<{ tripId: string }>();
+  const { trip, loading, error } = usePersistedTrip(params.tripId);
 
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string>>(
     Object.fromEntries(filters.map((f) => [f.key, 'Any']))
   );
   const [compareList, setCompareList] = useState<Destination[]>([]);
   const [showCompare, setShowCompare] = useState(false);
+
+  if (loading) return <PageMessage message="Loading trip…" />;
+  if (error || !trip) return <PageMessage message={error?.message ?? 'Trip not found.'} />;
 
   const toggleCompare = (d: Destination) => {
     setCompareList((list) => {
@@ -124,6 +129,17 @@ export default function DestinationRecommendation() {
       {showCompare && compareList.length >= 2 && (
         <CompareModal destinations={compareList} onClose={() => setShowCompare(false)} onSelect={onSelect} />
       )}
+    </AppShell>
+  );
+}
+
+function PageMessage({ message }: { message: string }) {
+  return (
+    <AppShell>
+      <Header />
+      <main className="flex-1 p-8">
+        <p className="text-muted-foreground">{message}</p>
+      </main>
     </AppShell>
   );
 }

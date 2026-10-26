@@ -9,13 +9,16 @@ import { MemberCard } from '@/components/trip/MemberCard';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useTripStore } from '@/store/tripStore';
 import { mockDestinations } from '@/data/mockDestinations';
 import { formatINR } from '@/components/trip/shared';
+import { useParams } from 'next/navigation';
+import { usePersistedTrip } from '@/components/trip/persisted';
 
 export default function GroupPreferences() {
-  const getCurrentTrip = useTripStore((s) => s.getCurrentTrip);
-  const trip = getCurrentTrip();
+  const params = useParams<{ tripId: string }>();
+  const { trip, loading, error } = usePersistedTrip(params.tripId);
+  if (loading) return <PageMessage message="Loading trip…" />;
+  if (error || !trip) return <PageMessage message={error?.message ?? 'Trip not found.'} />;
   const members = trip.members;
 
   // Aggregate interests
@@ -31,7 +34,9 @@ export default function GroupPreferences() {
     { label: 'Adventure vs Leisure', a: 'Adventure', b: 'Leisure', aCount: members.filter((m) => m.travelStyle === 'Adventure').length, bCount: members.filter((m) => m.travelStyle === 'Relaxed' || m.travelStyle === 'Luxury').length },
   ];
 
-  const bestMatch = mockDestinations[0];
+  const bestMatch =
+    mockDestinations.find((destination) => destination.name === trip.destinationName) ??
+    mockDestinations[0];
 
   return (
     <AppShell>
@@ -154,6 +159,17 @@ export default function GroupPreferences() {
             </div>
           </Card>
         </div>
+      </main>
+    </AppShell>
+  );
+}
+
+function PageMessage({ message }: { message: string }) {
+  return (
+    <AppShell>
+      <Header />
+      <main className="flex-1 p-8">
+        <p className="text-muted-foreground">{message}</p>
       </main>
     </AppShell>
   );

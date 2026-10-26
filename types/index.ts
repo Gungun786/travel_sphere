@@ -58,6 +58,8 @@ export interface Trip {
   travelStyle: TravelStyle;
   members: Member[];
   createdAt: string;
+  decideLater?: boolean;
+  optimizerExplanation?: string | null;
 }
 
 export interface Activity {
