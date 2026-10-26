@@ -23,6 +23,7 @@ typing_extensions==4.16.0
 uvicorn==0.52.4
 watchfiles==1.2.0
 websockets==16.0
-ortools
-google-genai
-PyJWT
+ortools==9.15.6755
+google-genai==2.25.0
+PyJWT==2.15.1
+httpx==0.28.1
