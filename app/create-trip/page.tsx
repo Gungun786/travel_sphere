@@ -28,10 +28,11 @@ import { mockMembers } from '@/data/mockMembers';
 import { useTripStore } from '@/store/tripStore';
 import {
   optimizeTrip,
+  createTrip,
   type OptimizeRequest,
 } from '@/lib/api';
 import { toast } from 'sonner';
-import type { Trip, Member, TravelStyle, Interest, FoodPref, Accommodation } from '@/types';
+import type { Member, TravelStyle, Interest, FoodPref, Accommodation } from '@/types';
 import { formatINR } from '@/components/trip/shared';
 
 const steps = ['Trip Details', 'Group', 'Preferences', 'Budget', 'Review'];
@@ -43,8 +44,6 @@ const accommodations: Accommodation[] = ['Budget', 'Mid-range', 'Premium'];
 
 export default function CreateTrip() {
   const router = useRouter();
-  const addTrip = useTripStore((s) => s.addTrip);
-  const updateTrip = useTripStore((s) => s.updateTrip);
 const trips = useTripStore((s) => s.trips);
 const [editId, setEditId] = useState<string | null>(null);
 
@@ -214,45 +213,23 @@ useEffect(() => {
       );
     }
 
-    const dest = mockDestinations.find(
-      (d) => d.name === chosenDestination
-    );
-
-    const trip: Trip = {
-     id: editingTrip?.id ?? 'trip-' + Date.now(),
+    const persistedTrip = await createTrip({
       name,
-      destinationName: chosenDestination,
-      destinationId: dest?.id ?? null,
-      image:
-        dest?.image ??
-        'https://images.pexels.com/photos/1603650/pexels-photo-1603650.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      startDate: startDate || '2026-06-01',
-      endDate: endDate || '2026-06-05',
-      days: 4,
-      travelers: members.length,
-      budget: budget.total,
-      perPerson: Math.round(
-        budget.total / Math.max(members.length, 1)
-      ),
-      progress: 35,
-      status: 'planning',
-      travelStyle:
-        prefs[members[0]?.id]?.style ?? 'Relaxed',
-      members,
-      createdAt:
-  editingTrip?.createdAt ??
-  new Date().toISOString().slice(0, 10),
-    };
+      destination: decideLater ? null : chosenDestination,
+      decide_later: decideLater,
+      date_start: startDate || '2026-06-01',
+      date_end: endDate || '2026-06-05',
+      budget_total: budget.total,
+      optimizer_result: optimization,
+      members: members.map((member) => ({
+        name: member.name,
+        budget_per_person:
+          member.budgetPerPerson || budget.perPerson,
+        interests: prefs[member.id]?.interests ?? member.interests,
+      })),
+    });
 
-    addTrip(trip);
-
-   if (editingTrip) {
-  updateTrip(trip);
-} else {
-  addTrip(trip);
-}
-
-    router.push(`/trip/${trip.id}`);
+    router.push(`/trip/${persistedTrip.id}`);
   } catch (error) {
     toast.error(
       error instanceof Error
@@ -324,7 +301,8 @@ useEffect(() => {
                       type="button"
                       variant={decideLater ? 'default' : 'outline'}
                       onClick={() => { setDecideLater(true); setDestination(''); }}
-                      className="gap-2"
+                      aria-pressed={decideLater}
+                      className={`gap-2 ${decideLater ? 'ring-2 ring-ocean ring-offset-2' : ''}`}
                     >
                       <MapPin className="h-4 w-4" />
                       {decideLater ? 'Will decide later' : 'Help me decide later'}
@@ -528,7 +506,10 @@ useEffect(() => {
 
               <div className="mt-6 space-y-4">
                 <SummaryRow label="Trip name" value={name} />
-                <SummaryRow label="Destination" value={destination || 'To be decided'} />
+                <SummaryRow
+                  label="Destination"
+                  value={decideLater ? 'To be decided' : destination || 'Not selected'}
+                />
                 <SummaryRow label="Dates" value={`${startDate || '—'} → ${endDate || '—'}`} />
                 <SummaryRow label="Travelers" value={`${members.length} people`} />
                 <SummaryRow label="Total budget" value={formatINR(budget.total)} />

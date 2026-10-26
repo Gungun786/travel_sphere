@@ -19,7 +19,11 @@ export function TripHero({ trip, active }: { trip: Trip; active: string }) {
   return (
     <div className="relative">
       <div className="relative h-56 w-full overflow-hidden md:h-72">
-        <img src={trip.image} alt={trip.destinationName} className="h-full w-full object-cover" />
+        {trip.image ? (
+          <img src={trip.image} alt={trip.destinationName} className="h-full w-full object-cover" />
+        ) : (
+          <div className="h-full w-full bg-gradient-to-br from-ocean/80 to-sunset/70" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
         <div className="absolute inset-x-0 bottom-0">
           <div className="mx-auto max-w-6xl px-4 pb-6 md:px-8">

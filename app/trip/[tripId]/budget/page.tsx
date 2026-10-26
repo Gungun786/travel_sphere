@@ -8,8 +8,9 @@ import { TripHero } from '@/components/trip/TripHero';
 import { BudgetCard } from '@/components/trip/BudgetCard';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { useTripStore } from '@/store/tripStore';
 import { formatINR } from '@/components/trip/shared';
+import { useParams } from 'next/navigation';
+import { usePersistedTrip } from '@/components/trip/persisted';
 
 const categoryColors: Record<string, string> = {
   Accommodation: 'hsl(199 89% 30%)',
@@ -20,9 +21,18 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function Budget() {
-  const getCurrentTrip = useTripStore((s) => s.getCurrentTrip);
-  const budget = useTripStore((s) => s.budget);
-  const trip = getCurrentTrip();
+  const params = useParams<{ tripId: string }>();
+  const { trip, loading, error } = usePersistedTrip(params.tripId);
+  if (loading) return <PageMessage message="Loading trip…" />;
+  if (error || !trip) return <PageMessage message={error?.message ?? 'Trip not found.'} />;
+
+  const budget = {
+    accommodation: { spent: trip.budget * 0.36, allocated: trip.budget * 0.36 },
+    transportation: { spent: trip.budget * 0.24, allocated: trip.budget * 0.24 },
+    food: { spent: trip.budget * 0.2, allocated: trip.budget * 0.2 },
+    activities: { spent: trip.budget * 0.2, allocated: trip.budget * 0.2 },
+    other: { spent: 0, allocated: 0 },
+  };
 
   const totalBudget = trip.budget;
   const estimated =
@@ -150,6 +160,17 @@ export default function Budget() {
             </div>
           </Card>
         </div>
+      </main>
+    </AppShell>
+  );
+}
+
+function PageMessage({ message }: { message: string }) {
+  return (
+    <AppShell>
+      <Header />
+      <main className="flex-1 p-8">
+        <p className="text-muted-foreground">{message}</p>
       </main>
     </AppShell>
   );

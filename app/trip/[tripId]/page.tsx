@@ -20,9 +20,10 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useTripStore } from '@/store/tripStore';
+import { useParams } from 'next/navigation';
+import { usePersistedTrip } from '@/components/trip/persisted';
+import { formatINR } from '@/components/trip/shared';
 import { mockDestinations } from '@/data/mockDestinations';
-import { formatINR, formatDateRange } from '@/components/trip/shared';
 
 const progressItems = [
   { label: 'Preferences completed', done: true, pct: 100 },
@@ -31,16 +32,19 @@ const progressItems = [
   { label: 'Budget planned', done: true, pct: 100 },
 ];
 
-const quickInfo = [
-  { icon: Users, label: 'Travelers', value: '5' },
-  { icon: CalendarDays, label: 'Duration', value: '4 days' },
-  { icon: Wallet, label: 'Budget', value: '₹50,000' },
-  { icon: Compass, label: 'Travel style', value: 'Nature' },
-];
-
 export default function TripOverview() {
-  const getCurrentTrip = useTripStore((s) => s.getCurrentTrip);
-  const trip = getCurrentTrip();
+  const params = useParams<{ tripId: string }>();
+  const { trip, loading, error } = usePersistedTrip(params.tripId);
+
+  if (loading) return <PageMessage message="Loading trip…" />;
+  if (error || !trip) return <PageMessage message={error?.message ?? 'Trip not found.'} />;
+
+  const quickInfo = [
+    { icon: Users, label: 'Travelers', value: `${trip.members.length}` },
+    { icon: CalendarDays, label: 'Duration', value: `${trip.days} days` },
+    { icon: Wallet, label: 'Budget', value: formatINR(trip.budget) },
+    { icon: Compass, label: 'Travel style', value: trip.travelStyle },
+  ];
 
   return (
     <AppShell>
@@ -90,7 +94,11 @@ export default function TripOverview() {
             {/* Destination */}
             <Card className="overflow-hidden p-0 lg:col-span-2">
               <div className="relative h-48">
-                <img src={trip.image} alt={trip.destinationName} className="h-full w-full object-cover" />
+                {trip.image ? (
+                  <img src={trip.image} alt={trip.destinationName} className="h-full w-full object-cover" />
+                ) : (
+                  <div className="h-full w-full bg-gradient-to-br from-ocean/80 to-sunset/70" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-4 left-4 text-white">
                   <p className="text-sm text-white/70">Destination</p>
@@ -99,7 +107,9 @@ export default function TripOverview() {
               </div>
               <div className="p-5">
                 <p className="text-sm text-muted-foreground">
-                  Your group’s selected destination. Explore alternatives or lock in your choice.
+                  {trip.decideLater && trip.optimizerExplanation
+                    ? trip.optimizerExplanation
+                    : 'Your group’s selected destination. Explore alternatives or lock in your choice.'}
                 </p>
                 <div className="mt-4 flex gap-2">
                   <Link href={`/trip/${trip.id}/destination`}>
@@ -235,6 +245,17 @@ export default function TripOverview() {
             </div>
           </Card>
         </div>
+      </main>
+    </AppShell>
+  );
+}
+
+function PageMessage({ message }: { message: string }) {
+  return (
+    <AppShell>
+      <Header />
+      <main className="flex-1 p-8">
+        <p className="text-muted-foreground">{message}</p>
       </main>
     </AppShell>
   );
