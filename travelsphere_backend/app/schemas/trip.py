@@ -26,6 +26,10 @@ class TripCreate(BaseModel):
         return self
 
 
+class TripUpdate(BaseModel):
+    optimizer_result: dict | None
+
+
 class TripMemberResponse(BaseModel):
     id: int
     name: str

@@ -5,7 +5,12 @@ from app.core.database import get_db
 from app.core.security import get_current_user
 from app.models.trip import Trip, TripMember
 from app.models.user import User
-from app.schemas.trip import TripCreate, TripMemberResponse, TripResponse
+from app.schemas.trip import (
+    TripCreate,
+    TripMemberResponse,
+    TripResponse,
+    TripUpdate,
+)
 
 router = APIRouter(prefix="/api/trips", tags=["trips"])
 
@@ -92,4 +97,25 @@ def get_trip(
     )
     if trip is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trip not found.")
+    return serialize_trip(trip)
+
+
+@router.patch("/{trip_id}", response_model=TripResponse)
+def update_trip(
+    trip_id: int,
+    payload: TripUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    trip = (
+        db.query(Trip)
+        .filter(Trip.id == trip_id, Trip.owner_id == user.id)
+        .one_or_none()
+    )
+    if trip is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trip not found.")
+
+    trip.optimizer_result = payload.optimizer_result
+    db.commit()
+    db.refresh(trip)
     return serialize_trip(trip)
