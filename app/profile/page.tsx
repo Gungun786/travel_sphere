@@ -15,6 +15,7 @@ import { useUserStore } from '@/store/userStore';
 import { useTripStore } from '@/store/tripStore';
 import { toast } from 'sonner';
 import { formatINR } from '@/components/trip/shared';
+import { destinationImage } from '@/components/trip/destinationImage';
 
 const pastTrips = [
   { id: 'p1', name: 'Rishikesh Retreat', image: 'https://images.pexels.com/photos/15970052/pexels-photo-15970052.jpeg?auto=compress&cs=tinysrgb&w=800', year: '2025' },
@@ -137,7 +138,7 @@ export default function Profile() {
               {pastTrips.map((t) => (
                 <Card key={t.id} className="group overflow-hidden p-0 transition-all hover:-translate-y-1 hover:shadow-soft-lg">
                   <div className="relative h-40 overflow-hidden">
-                    <img src={t.image} alt={t.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img {...destinationImage(t.name.split(' ')[0].toLowerCase(), t.name)} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     <div className="absolute bottom-3 left-3 right-3 text-white">
                       <p className="text-xs text-white/70">{t.year}</p>
@@ -159,7 +160,7 @@ export default function Profile() {
               {trips.slice(0, 3).map((t) => (
                 <Link key={t.id} href={`/trip/${t.id}`}>
                   <div className="flex items-center gap-3 rounded-xl border border-border p-3 transition-colors hover:bg-muted/50">
-                    <img src={t.image} alt={t.name} className="h-12 w-12 rounded-lg object-cover" />
+                    <img {...destinationImage(t.name.split(' ')[0].toLowerCase(), t.name)} className="h-12 w-12 rounded-lg object-cover" />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{t.name}</p>
                       <p className="flex items-center gap-1 text-xs text-muted-foreground">

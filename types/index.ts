@@ -122,16 +122,21 @@ export interface ItineraryVote {
 export interface Destination {
   id: string;
   name: string;
-  state: string;
+  slug: string;
+  state: string | null;
   image: string;
-  match: number;
-  estimatedCost: number;
-  temperature: string;
-  bestSeason: string;
-  activities: string[];
-  rating: number;
-  travelStyle: string[];
-  budgetLevel: 'Budget' | 'Mid-range' | 'Premium';
-  seasonTags: string[];
-  description: string;
+  cost: number;
+  bestSeason: string | null;
+  tags: string[];
+  topPlaces: { name: string; note: string }[];
+  description: string | null;
+  aliases: string[];
+  places: {
+    id: number;
+    name: string;
+    category: string;
+    description: string;
+    avgHours: number;
+    entryCost: number;
+  }[];
 }

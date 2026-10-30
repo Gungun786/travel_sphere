@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import { RefreshCw, Map as MapIcon, Plus, X, Pencil } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Header } from '@/components/layout/Header';
@@ -24,11 +25,15 @@ import { formatINR } from '@/components/trip/shared';
 import type { Activity } from '@/types';
 
 export default function Itinerary() {
+  const params = useParams<{ tripId: string }>();
   const getCurrentTrip = useTripStore((s) => s.getCurrentTrip);
   const itinerary = useTripStore((s) => s.itinerary);
   const addItineraryActivity = useTripStore((s) => s.addItineraryActivity);
   const removeItineraryActivity = useTripStore((s) => s.removeItineraryActivity);
   const trip = getCurrentTrip();
+  if (!/^[1-9]\d*$/.test(params.tripId)) {
+    return <PageMessage message="Trip not found." />;
+  }
 
   const [activeDay, setActiveDay] = useState(1);
   const [addOpen, setAddOpen] = useState(false);
@@ -55,10 +60,12 @@ export default function Itinerary() {
       toast.error('Please enter a place name.');
       return;
     }
+
     if (editActivity) {
       // For simplicity, remove + re-add (mock editing)
       removeItineraryActivity(activeDay, editActivity.id);
     }
+
     const newActivity: Activity = {
       id: 'act-' + Date.now(),
       time: form.time,
@@ -219,6 +226,17 @@ export default function Itinerary() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </AppShell>
+  );
+}
+
+function PageMessage({ message }: { message: string }) {
+  return (
+    <AppShell>
+      <Header />
+      <main className="flex-1 p-8">
+        <p className="text-muted-foreground">{message}</p>
+      </main>
     </AppShell>
   );
 }

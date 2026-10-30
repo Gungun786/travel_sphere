@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import { Plus, ArrowRight, Check } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Header } from '@/components/layout/Header';
@@ -27,11 +28,15 @@ import type { Expense } from '@/types';
 const categories = ['Food', 'Transport', 'Stay', 'Activities', 'Shopping', 'Other'];
 
 export default function Expenses() {
+  const params = useParams<{ tripId: string }>();
   const getCurrentTrip = useTripStore((s) => s.getCurrentTrip);
   const expenses = useTripStore((s) => s.expenses);
   const addExpense = useTripStore((s) => s.addExpense);
   const removeExpense = useTripStore((s) => s.removeExpense);
   const trip = getCurrentTrip();
+  if (!/^[1-9]\d*$/.test(params.tripId)) {
+    return <PageMessage message="Trip not found." />;
+  }
 
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
@@ -64,6 +69,7 @@ export default function Expenses() {
       toast.error('Enter an expense name and amount.');
       return;
     }
+
     const e: Expense = {
       id: 'e' + Date.now(),
       name: form.name,
@@ -223,6 +229,17 @@ export default function Expenses() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </AppShell>
+  );
+}
+
+function PageMessage({ message }: { message: string }) {
+  return (
+    <AppShell>
+      <Header />
+      <main className="flex-1 p-8">
+        <p className="text-muted-foreground">{message}</p>
+      </main>
     </AppShell>
   );
 }

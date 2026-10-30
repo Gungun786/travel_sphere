@@ -23,14 +23,15 @@ import { Slider } from '@/components/ui/slider';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { PreferenceCard } from '@/components/trip/PreferenceCard';
-import { mockDestinations } from '@/data/mockDestinations';
 import { mockMembers } from '@/data/mockMembers';
 import { useTripStore } from '@/store/tripStore';
 import {
   optimizeTrip,
   createTrip,
+  listDestinations,
   type OptimizeRequest,
 } from '@/lib/api';
+import { apiDestinationToDestination } from '@/lib/destinations';
 import { toast } from 'sonner';
 import type { Member, TravelStyle, Interest, FoodPref, Accommodation } from '@/types';
 import { formatINR } from '@/components/trip/shared';
@@ -72,6 +73,24 @@ const editingTrip = editId
     activities: 8000,
   });
   const [loading, setLoading] = useState(false);
+  const [destinations, setDestinations] = useState<ReturnType<typeof apiDestinationToDestination>[]>([]);
+  const [destinationSearch, setDestinationSearch] = useState('');
+  const [destinationTag, setDestinationTag] = useState('All');
+  useEffect(() => {
+    listDestinations()
+      .then((items) => setDestinations(items.map(apiDestinationToDestination)))
+      .catch(() => setDestinations([]));
+  }, []);
+  const destinationTags = Array.from(new Set(destinations.flatMap((item) => item.tags))).sort();
+  const filteredDestinations = destinations.filter((item) => {
+    const query = destinationSearch.trim().toLowerCase();
+    return (
+      (!query ||
+        item.name.toLowerCase().includes(query) ||
+        item.aliases.some((alias) => alias.toLowerCase().includes(query))) &&
+      (destinationTag === 'All' || item.tags.includes(destinationTag))
+    );
+  });
   useEffect(() => {
   const id = new URLSearchParams(window.location.search).get('edit');
   setEditId(id);
@@ -208,6 +227,13 @@ useEffect(() => {
     const chosenDestination = optimization?.chosen ?? destination;
 
     if (!chosenDestination) {
+      if (optimization?.chosen === null) {
+        throw new Error(
+          optimization.reason ??
+            'No destination fits the selected dates and budget.'
+        );
+      }
+
       throw new Error(
         'Please select a destination or choose "decide later".'
       );
@@ -287,13 +313,26 @@ useEffect(() => {
                 <div className="space-y-1.5">
                   <Label>Destination</Label>
                   <div className="grid gap-3 sm:grid-cols-2">
+                    <Input
+                      value={destinationSearch}
+                      onChange={(event) => setDestinationSearch(event.target.value)}
+                      placeholder="Search name or alias"
+                    />
+                    <select
+                      value={destinationTag}
+                      onChange={(event) => setDestinationTag(event.target.value)}
+                      className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus:border-ocean"
+                    >
+                      <option value="All">All interests</option>
+                      {destinationTags.map((tag) => <option key={tag}>{tag}</option>)}
+                    </select>
                     <select
                       value={destination}
                       onChange={(e) => { setDestination(e.target.value); setDecideLater(false); }}
                       className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus:border-ocean"
                     >
                       <option value="">Select a destination</option>
-                      {mockDestinations.map((d) => (
+                      {filteredDestinations.map((d) => (
                         <option key={d.id} value={d.name}>{d.name}</option>
                       ))}
                     </select>

@@ -10,9 +10,9 @@ import {
   Circle,
   MapPin,
   ArrowRight,
-  Star,
   TrendingUp,
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Header } from '@/components/layout/Header';
 import { TripHero } from '@/components/trip/TripHero';
@@ -23,7 +23,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useParams } from 'next/navigation';
 import { usePersistedTrip } from '@/components/trip/persisted';
 import { formatINR } from '@/components/trip/shared';
-import { mockDestinations } from '@/data/mockDestinations';
+import { getDestination, type ApiDestination } from '@/lib/api';
+import { destinationImage } from '@/components/trip/destinationImage';
 
 const progressItems = [
   { label: 'Preferences completed', done: true, pct: 100 },
@@ -35,15 +36,31 @@ const progressItems = [
 export default function TripOverview() {
   const params = useParams<{ tripId: string }>();
   const { trip, loading, error } = usePersistedTrip(params.tripId);
+  const [destination, setDestination] = useState<ApiDestination | null>(null);
+
+  useEffect(() => {
+    if (trip?.destinationName && trip.destinationName !== 'To be decided') {
+      getDestination(trip.destinationName.toLowerCase().replace(/\s+/g, '-'))
+        .then(setDestination)
+        .catch(() => setDestination(null));
+    }
+  }, [trip?.destinationName]);
 
   if (loading) return <PageMessage message="Loading trip…" />;
   if (error || !trip) return <PageMessage message={error?.message ?? 'Trip not found.'} />;
 
+  const interestCounts = trip.members.reduce<Record<string, number>>((counts, member) => {
+    member.interests.forEach((interest) => {
+      counts[interest] = (counts[interest] ?? 0) + 1;
+    });
+    return counts;
+  }, {});
+  const travelStyle = Object.entries(interestCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? 'Not specified';
   const quickInfo = [
     { icon: Users, label: 'Travelers', value: `${trip.members.length}` },
     { icon: CalendarDays, label: 'Duration', value: `${trip.days} days` },
     { icon: Wallet, label: 'Budget', value: formatINR(trip.budget) },
-    { icon: Compass, label: 'Travel style', value: trip.travelStyle },
+    { icon: Compass, label: 'Travel style', value: travelStyle },
   ];
 
   return (
@@ -94,8 +111,8 @@ export default function TripOverview() {
             {/* Destination */}
             <Card className="overflow-hidden p-0 lg:col-span-2">
               <div className="relative h-48">
-                {trip.image ? (
-                  <img src={trip.image} alt={trip.destinationName} className="h-full w-full object-cover" />
+                {trip.destinationName !== 'To be decided' ? (
+                  <img {...destinationImage(trip.destinationName.toLowerCase().replace(/\s+/g, '-'), trip.destinationName)} className="h-full w-full object-cover" />
                 ) : (
                   <div className="h-full w-full bg-gradient-to-br from-ocean/80 to-sunset/70" />
                 )}
@@ -207,20 +224,20 @@ export default function TripOverview() {
           </div>
 
           {/* Top places */}
-          <Card className="mt-5 p-5">
+          {destination && destination.top_places.length > 0 && <Card className="mt-5 p-5">
             <h3 className="font-display text-lg font-semibold">Top Places in {trip.destinationName}</h3>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {mockDestinations[0].activities.slice(0, 3).map((a, i) => (
-                <div key={a} className="flex items-start gap-3 rounded-lg border border-border p-3">
+              {destination.top_places.map((place) => (
+                <div key={place.name} className="flex items-start gap-3 rounded-lg border border-border p-3">
                   <MapPin className="mt-0.5 h-4 w-4 text-ocean" />
                   <div>
-                    <p className="text-sm font-medium">{a}</p>
-                    <p className="text-xs text-muted-foreground">Highly rated by travelers</p>
+                    <p className="text-sm font-medium">{place.name}</p>
+                    <p className="text-xs text-muted-foreground">{place.note}</p>
                   </div>
                 </div>
               ))}
             </div>
-          </Card>
+          </Card>}
 
           {/* Recent activity */}
           <Card className="mt-5 p-5">

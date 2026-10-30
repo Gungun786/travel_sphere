@@ -1,0 +1,2077 @@
+[
+  {
+    "slug": "goa",
+    "name": "Goa",
+    "state": "Goa",
+    "description": "Goa is a coastal state known for beaches, Portuguese-influenced heritage, and lively markets. It combines relaxed seaside travel with food, history, and nightlife.",
+    "best_months": [
+      11,
+      12,
+      1,
+      2
+    ],
+    "avoid_months": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2500,
+    "daily_budget_max": 7000,
+    "tags": [
+      "Beaches",
+      "Nightlife",
+      "Food",
+      "Historical",
+      "Shopping"
+    ],
+    "avail_start": 305,
+    "avail_end": 59,
+    "places": [
+      {
+        "name": "Baga Beach",
+        "category": "Beaches",
+        "description": "A popular North Goa beach with water activities and evening markets.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Panaji",
+        "category": "Historical",
+        "description": "Goa's capital with Latin Quarter streets and riverside views.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Old Goa",
+        "category": "Historical",
+        "description": "Historic churches and monuments from the Portuguese era.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Dudhsagar Falls",
+        "category": "Wildlife",
+        "description": "A prominent waterfall in the Western Ghats region.",
+        "avg_hours": 6,
+        "entry_cost": 500,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Anjuna Flea Market",
+        "category": "Shopping",
+        "description": "A seasonal market known for clothing, crafts, and souvenirs.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 15000,
+    "best_season": "November to February",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "manali",
+    "name": "Manali",
+    "state": "Himachal Pradesh",
+    "description": "Manali is a Himalayan town with mountain valleys, cedar forests, and access to high-altitude routes. It suits mountain walks, trekking, and outdoor adventures.",
+    "best_months": [
+      3,
+      4,
+      5,
+      6,
+      10,
+      11,
+      12,
+      1,
+      2
+    ],
+    "avoid_months": [
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2500,
+    "daily_budget_max": 7000,
+    "tags": [
+      "Mountains",
+      "Trekking",
+      "Photography",
+      "Food"
+    ],
+    "avail_start": 1,
+    "avail_end": 181,
+    "places": [
+      {
+        "name": "Solang Valley",
+        "category": "Mountains",
+        "description": "A mountain valley popular for outdoor activities and views.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Old Manali",
+        "category": "Food",
+        "description": "A walkable area with cafes and traditional village character.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Hadimba Temple",
+        "category": "Historical",
+        "description": "A wooden temple set among cedar trees.",
+        "avg_hours": 2,
+        "entry_cost": 30,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Rohtang Pass",
+        "category": "Mountains",
+        "description": "A high mountain pass visited when seasonal access is open.",
+        "avg_hours": 6,
+        "entry_cost": 550,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Vashisht Temple",
+        "category": "Historical",
+        "description": "A village temple area known for its hot springs.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 18000,
+    "best_season": "March to June and October to February",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "kerala",
+    "name": "Kerala",
+    "state": "Kerala",
+    "description": "Kerala is known for backwaters, tropical coastlines, and hill-country tea plantations. Its landscapes support relaxed nature, food, and cultural trips.",
+    "best_months": [
+      9,
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 2500,
+    "daily_budget_max": 7500,
+    "tags": [
+      "Wildlife",
+      "Food",
+      "Beaches",
+      "Historical",
+      "Photography"
+    ],
+    "avail_start": 244,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "Alappuzha",
+        "category": "Photography",
+        "description": "A gateway to Kerala's backwater houseboat routes.",
+        "avg_hours": 5,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Munnar",
+        "category": "Mountains",
+        "description": "A hill station surrounded by tea estates.",
+        "avg_hours": 5,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Fort Kochi",
+        "category": "Historical",
+        "description": "A historic waterfront district with layered trading influences.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Periyar National Park",
+        "category": "Wildlife",
+        "description": "A protected area around a lake and forested hills.",
+        "avg_hours": 6,
+        "entry_cost": 500,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Varkala Beach",
+        "category": "Beaches",
+        "description": "A cliff-backed beach on Kerala's Arabian Sea coast.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 20000,
+    "best_season": "September to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "jaipur",
+    "name": "Jaipur",
+    "state": "Rajasthan",
+    "description": "Jaipur is the Pink City, known for Rajput-era forts, palaces, crafts, and regional cuisine. Its compact heritage areas work well for history, food, and shopping.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6500,
+    "tags": [
+      "Historical",
+      "Food",
+      "Shopping",
+      "Photography"
+    ],
+    "avail_start": 274,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "Amber Fort",
+        "category": "Historical",
+        "description": "A hilltop fort complex with courtyards and palaces.",
+        "avg_hours": 3,
+        "entry_cost": 100,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "City Palace",
+        "category": "Historical",
+        "description": "A royal complex with museums and ceremonial courtyards.",
+        "avg_hours": 3,
+        "entry_cost": 300,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Hawa Mahal",
+        "category": "Photography",
+        "description": "An iconic pink sandstone facade in the old city.",
+        "avg_hours": 1,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Jantar Mantar",
+        "category": "Historical",
+        "description": "An astronomical observatory with monumental instruments.",
+        "avg_hours": 2,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Johari Bazaar",
+        "category": "Shopping",
+        "description": "A central market area known for jewelry and textiles.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 18000,
+    "best_season": "October to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "rishikesh",
+    "name": "Rishikesh",
+    "state": "Uttarakhand",
+    "description": "Rishikesh is a riverside city at the Himalayan foothills associated with yoga, ashrams, and rafting. It offers outdoor activity alongside spiritual and cultural experiences.",
+    "best_months": [
+      9,
+      10,
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "avoid_months": [
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 1800,
+    "daily_budget_max": 5500,
+    "tags": [
+      "Trekking",
+      "Mountains",
+      "Wildlife",
+      "Photography"
+    ],
+    "avail_start": 244,
+    "avail_end": 120,
+    "places": [
+      {
+        "name": "Laxman Jhula area",
+        "category": "Historical",
+        "description": "A riverside neighborhood with temples, cafes, and views.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Triveni Ghat",
+        "category": "Historical",
+        "description": "A ghat known for its evening river ceremony.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Rajaji National Park",
+        "category": "Wildlife",
+        "description": "A nearby protected area with forest and wildlife habitats.",
+        "avg_hours": 6,
+        "entry_cost": 150,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "River rafting",
+        "category": "Trekking",
+        "description": "A seasonal rafting activity on the Ganges near the city.",
+        "avg_hours": 4,
+        "entry_cost": 1500,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Neer Garh Waterfall",
+        "category": "Trekking",
+        "description": "A short trek to a forest waterfall near Rishikesh.",
+        "avg_hours": 3,
+        "entry_cost": 30,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 16000,
+    "best_season": "September to April",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "meghalaya",
+    "name": "Meghalaya",
+    "state": "Meghalaya",
+    "description": "Meghalaya is a northeastern hill state with forests, waterfalls, caves, and living root bridges. It is especially suited to trekking, photography, and nature-focused travel.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "avoid_months": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6500,
+    "tags": [
+      "Trekking",
+      "Mountains",
+      "Wildlife",
+      "Photography"
+    ],
+    "avail_start": 274,
+    "avail_end": 151,
+    "places": [
+      {
+        "name": "Shillong",
+        "category": "Photography",
+        "description": "The hill capital with lakes, viewpoints, and cultural sites.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Cherrapunji",
+        "category": "Trekking",
+        "description": "A highland area known for waterfalls and limestone caves.",
+        "avg_hours": 6,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Nongriat",
+        "category": "Trekking",
+        "description": "A village area reached by a trek to a living root bridge.",
+        "avg_hours": 8,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Mawlynnong",
+        "category": "Photography",
+        "description": "A village area known for scenic paths and living-root bridges nearby.",
+        "avg_hours": 4,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Mawsmai Cave",
+        "category": "Trekking",
+        "description": "A limestone cave near Cherrapunji open for guided visits.",
+        "avg_hours": 2,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 22000,
+    "best_season": "October to May",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "udaipur",
+    "name": "Udaipur",
+    "state": "Rajasthan",
+    "description": "Udaipur is a lakeside city known for palaces, historic neighborhoods, and views over the Aravalli hills. It is a practical choice for heritage, photography, food, and shopping.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6500,
+    "tags": [
+      "Historical",
+      "Photography",
+      "Food",
+      "Shopping"
+    ],
+    "avail_start": 274,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "City Palace",
+        "category": "Historical",
+        "description": "A large palace complex overlooking Lake Pichola.",
+        "avg_hours": 3,
+        "entry_cost": 400,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Lake Pichola",
+        "category": "Photography",
+        "description": "A historic lake surrounded by palaces and old-city views.",
+        "avg_hours": 3,
+        "entry_cost": 500,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Jagdish Temple",
+        "category": "Historical",
+        "description": "A prominent Hindu temple near the City Palace area.",
+        "avg_hours": 1,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Saheliyon-ki-Bari",
+        "category": "Photography",
+        "description": "A historic garden with fountains and landscaped paths.",
+        "avg_hours": 2,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Bagore Ki Haveli",
+        "category": "Historical",
+        "description": "A restored haveli with a museum and cultural performances.",
+        "avg_hours": 2,
+        "entry_cost": 100,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 18000,
+    "best_season": "October to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "jaisalmer",
+    "name": "Jaisalmer",
+    "state": "Rajasthan",
+    "description": "Jaisalmer is a desert city centered on a distinctive sandstone fort and historic havelis. Cooler months are best for heritage walks and desert excursions.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6000,
+    "tags": [
+      "Historical",
+      "Photography",
+      "Trekking",
+      "Shopping"
+    ],
+    "avail_start": 274,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "Jaisalmer Fort",
+        "category": "Historical",
+        "description": "A living sandstone fort with lanes, homes, and temples.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Patwon Ki Haveli",
+        "category": "Historical",
+        "description": "A group of ornate merchant mansions in the old city.",
+        "avg_hours": 2,
+        "entry_cost": 100,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Sam Sand Dunes",
+        "category": "Photography",
+        "description": "A desert area used for sunset views and camel excursions.",
+        "avg_hours": 5,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Gadisar Lake",
+        "category": "Photography",
+        "description": "A historic lake with temples and sandstone gateways.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Kuldhara",
+        "category": "Historical",
+        "description": "An abandoned village site outside Jaisalmer.",
+        "avg_hours": 3,
+        "entry_cost": 20,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 18000,
+    "best_season": "October to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "agra",
+    "name": "Agra",
+    "state": "Uttar Pradesh",
+    "description": "Agra is a historic city best known for the Taj Mahal and Mughal-era monuments. Its core sights can be covered in a focused heritage visit with local food stops.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 1800,
+    "daily_budget_max": 5000,
+    "tags": [
+      "Historical",
+      "Photography",
+      "Food",
+      "Shopping"
+    ],
+    "avail_start": 274,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "Taj Mahal",
+        "category": "Historical",
+        "description": "A renowned white-marble mausoleum on the Yamuna River.",
+        "avg_hours": 3,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Agra Fort",
+        "category": "Historical",
+        "description": "A major Mughal fort with palaces and courtyards.",
+        "avg_hours": 3,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Mehtab Bagh",
+        "category": "Photography",
+        "description": "A garden across the Yamuna with a view toward the Taj Mahal.",
+        "avg_hours": 2,
+        "entry_cost": 25,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Itmad-ud-Daulah's Tomb",
+        "category": "Historical",
+        "description": "A Mughal tomb complex often called the Baby Taj.",
+        "avg_hours": 2,
+        "entry_cost": 30,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Kinari Bazaar",
+        "category": "Shopping",
+        "description": "A busy old-city market near the heritage area.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 15000,
+    "best_season": "October to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "varanasi",
+    "name": "Varanasi",
+    "state": "Uttar Pradesh",
+    "description": "Varanasi is an ancient city on the Ganges known for ghats, temples, and living religious traditions. It offers a concentrated cultural and historical travel experience.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 1800,
+    "daily_budget_max": 5000,
+    "tags": [
+      "Historical",
+      "Photography",
+      "Food",
+      "Shopping"
+    ],
+    "avail_start": 274,
+    "avail_end": 120,
+    "aliases": [
+      "Banaras",
+      "Benares",
+      "Kashi"
+    ],
+    "source_note": "needs review",
+    "places": [
+      {
+        "name": "Kashi Vishwanath Temple",
+        "category": "Historical",
+        "description": "A major Hindu temple dedicated to Shiva in the old city.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Dashashwamedh Ghat and the evening Ganga Aarti",
+        "category": "Historical",
+        "description": "A prominent riverside ghat known for its evening Ganga Aarti.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Assi Ghat",
+        "category": "Photography",
+        "description": "A southern ghat used for riverside walks and ceremonies.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Sunrise boat ride on the Ganga",
+        "category": "Photography",
+        "description": "A dawn boat experience offering views of the riverfront ghats.",
+        "avg_hours": 2,
+        "entry_cost": 500,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Sarnath",
+        "category": "Historical",
+        "description": "A nearby Buddhist pilgrimage site associated with the Buddha's first sermon.",
+        "avg_hours": 4,
+        "entry_cost": 40,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Ramnagar Fort",
+        "category": "Historical",
+        "description": "A riverside fort and museum across the Ganges from Varanasi.",
+        "avg_hours": 3,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 15000,
+    "best_season": "October to April",
+    "lat": null,
+    "lon": null,
+    "verified": false
+  },
+  {
+    "slug": "shimla",
+    "name": "Shimla",
+    "state": "Himachal Pradesh",
+    "description": "Shimla is a hill station with colonial-era buildings, wooded slopes, and mountain views. It works well for relaxed walks, photography, and nearby trekking.",
+    "best_months": [
+      3,
+      4,
+      5,
+      6,
+      10,
+      11,
+      12,
+      1,
+      2
+    ],
+    "avoid_months": [
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6000,
+    "tags": [
+      "Mountains",
+      "Photography",
+      "Historical",
+      "Trekking"
+    ],
+    "avail_start": 1,
+    "avail_end": 181,
+    "places": [
+      {
+        "name": "The Ridge",
+        "category": "Photography",
+        "description": "A central open promenade with mountain and town views.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Mall Road",
+        "category": "Shopping",
+        "description": "A pedestrian shopping and dining street in central Shimla.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Jakhoo Temple",
+        "category": "Historical",
+        "description": "A hilltop temple reached by a steep walk above the town.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Viceregal Lodge",
+        "category": "Historical",
+        "description": "A historic building now associated with the Indian Institute of Advanced Study.",
+        "avg_hours": 2,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Kufri",
+        "category": "Mountains",
+        "description": "A nearby hill area used for views and outdoor activities.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 18000,
+    "best_season": "March to June and October to February",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "leh-ladakh",
+    "name": "Leh-Ladakh",
+    "state": "Ladakh",
+    "description": "Leh-Ladakh is a high-altitude region with stark mountains, monasteries, and wide valley landscapes. Travel requires acclimatization and is generally concentrated in the warmer access months.",
+    "best_months": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "avoid_months": [
+      1,
+      2,
+      3,
+      4,
+      10,
+      11,
+      12
+    ],
+    "daily_budget_min": 3500,
+    "daily_budget_max": 9000,
+    "tags": [
+      "Mountains",
+      "Trekking",
+      "Photography",
+      "Historical"
+    ],
+    "avail_start": 121,
+    "avail_end": 273,
+    "places": [
+      {
+        "name": "Leh Palace",
+        "category": "Historical",
+        "description": "A historic palace overlooking Leh town.",
+        "avg_hours": 2,
+        "entry_cost": 25,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Shanti Stupa",
+        "category": "Photography",
+        "description": "A hilltop Buddhist stupa with broad views over Leh.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Thiksey Monastery",
+        "category": "Historical",
+        "description": "A hill monastery south of Leh with distinctive architecture.",
+        "avg_hours": 3,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Pangong Lake",
+        "category": "Photography",
+        "description": "A high-altitude lake known for changing blue tones and mountain scenery.",
+        "avg_hours": 8,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Nubra Valley",
+        "category": "Mountains",
+        "description": "A high-altitude valley reached over a mountain pass from Leh.",
+        "avg_hours": 10,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 30000,
+    "best_season": "May to September",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "mussoorie",
+    "name": "Mussoorie",
+    "state": "Uttarakhand",
+    "description": "Mussoorie is a wooded Himalayan foothill town with promenades, viewpoints, and waterfalls. It is suited to short mountain breaks, photography, and relaxed walking.",
+    "best_months": [
+      3,
+      4,
+      5,
+      6,
+      10,
+      11
+    ],
+    "avoid_months": [
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2000,
+    "daily_budget_max": 5500,
+    "tags": [
+      "Mountains",
+      "Trekking",
+      "Photography",
+      "Shopping"
+    ],
+    "avail_start": 60,
+    "avail_end": 334,
+    "places": [
+      {
+        "name": "Mall Road",
+        "category": "Shopping",
+        "description": "A central pedestrian promenade with shops and mountain views.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Gun Hill",
+        "category": "Photography",
+        "description": "A viewpoint above Mussoorie reached by a short cable-car ride.",
+        "avg_hours": 2,
+        "entry_cost": 200,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Kempty Falls",
+        "category": "Photography",
+        "description": "A well-known waterfall and picnic site near Mussoorie.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Lal Tibba",
+        "category": "Photography",
+        "description": "A high viewpoint in the Landour area.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Company Garden",
+        "category": "Photography",
+        "description": "A landscaped garden with walking paths and seasonal flowers.",
+        "avg_hours": 2,
+        "entry_cost": 40,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 16000,
+    "best_season": "March to June and October to November",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "darjeeling",
+    "name": "Darjeeling",
+    "state": "West Bengal",
+    "description": "Darjeeling is a Himalayan hill town known for tea gardens, mountain views, and a historic railway. Its cool climate and layered landscapes suit photography and relaxed exploration.",
+    "best_months": [
+      3,
+      4,
+      5,
+      10,
+      11
+    ],
+    "avoid_months": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6000,
+    "tags": [
+      "Mountains",
+      "Photography",
+      "Historical",
+      "Shopping"
+    ],
+    "avail_start": 60,
+    "avail_end": 334,
+    "places": [
+      {
+        "name": "Tiger Hill",
+        "category": "Photography",
+        "description": "A sunrise viewpoint with views toward Himalayan peaks on clear days.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Batasia Loop",
+        "category": "Photography",
+        "description": "A railway loop and garden with views over Darjeeling hills.",
+        "avg_hours": 2,
+        "entry_cost": 20,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Darjeeling Himalayan Railway",
+        "category": "Historical",
+        "description": "A historic narrow-gauge railway serving Darjeeling and nearby towns.",
+        "avg_hours": 5,
+        "entry_cost": 1000,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Happy Valley Tea Estate",
+        "category": "Photography",
+        "description": "A tea estate where visitors can see cultivated hill slopes.",
+        "avg_hours": 2,
+        "entry_cost": 100,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Padmaja Naidu Himalayan Zoological Park",
+        "category": "Wildlife",
+        "description": "A mountain zoo focused on Himalayan species and conservation.",
+        "avg_hours": 3,
+        "entry_cost": 60,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 18000,
+    "best_season": "March to May and October to November",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "gangtok",
+    "name": "Gangtok",
+    "state": "Sikkim",
+    "description": "Gangtok is a Himalayan capital with monasteries, ridgelines, and views toward Kanchenjunga. It combines mountain scenery with cultural sites and short excursions.",
+    "best_months": [
+      3,
+      4,
+      5,
+      10,
+      11
+    ],
+    "avoid_months": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2500,
+    "daily_budget_max": 7000,
+    "tags": [
+      "Mountains",
+      "Photography",
+      "Historical",
+      "Trekking"
+    ],
+    "avail_start": 60,
+    "avail_end": 334,
+    "places": [
+      {
+        "name": "Rumtek Monastery",
+        "category": "Historical",
+        "description": "A major Tibetan Buddhist monastery near Gangtok.",
+        "avg_hours": 3,
+        "entry_cost": 10,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Tsomgo Lake",
+        "category": "Mountains",
+        "description": "A high-altitude glacial lake reached by road from Gangtok.",
+        "avg_hours": 6,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Nathula Pass",
+        "category": "Mountains",
+        "description": "A high mountain pass visited under permit when open.",
+        "avg_hours": 8,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Gangtok Ropeway",
+        "category": "Photography",
+        "description": "A cable-car ride offering elevated views over Gangtok.",
+        "avg_hours": 2,
+        "entry_cost": 150,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Banjhakri Falls",
+        "category": "Photography",
+        "description": "A landscaped waterfall and park near Gangtok.",
+        "avg_hours": 2,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 20000,
+    "best_season": "March to May and October to November",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "munnar",
+    "name": "Munnar",
+    "state": "Kerala",
+    "description": "Munnar is a highland town surrounded by tea estates, forests, and rolling Western Ghats scenery. It is a strong base for photography, short treks, and nature visits.",
+    "best_months": [
+      9,
+      10,
+      11,
+      12,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "avoid_months": [
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6000,
+    "tags": [
+      "Mountains",
+      "Photography",
+      "Wildlife",
+      "Trekking"
+    ],
+    "avail_start": 244,
+    "avail_end": 151,
+    "places": [
+      {
+        "name": "Tea Museum",
+        "category": "Historical",
+        "description": "A museum presenting the history of tea production around Munnar.",
+        "avg_hours": 2,
+        "entry_cost": 125,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Eravikulam National Park",
+        "category": "Wildlife",
+        "description": "A protected mountain park near Munnar with highland habitats.",
+        "avg_hours": 4,
+        "entry_cost": 200,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Mattupetty Dam",
+        "category": "Photography",
+        "description": "A reservoir and scenic stop in the hills near Munnar.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Top Station",
+        "category": "Photography",
+        "description": "A high viewpoint on the Munnar-Kodaikanal road.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Kundala Lake",
+        "category": "Photography",
+        "description": "A hill lake with surrounding tea-country views.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 18000,
+    "best_season": "September to May",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "hampi",
+    "name": "Hampi",
+    "state": "Karnataka",
+    "description": "Hampi is an archaeological landscape of temple ruins, boulder hills, and former Vijayanagara monuments. Its open heritage sites are best explored in cooler months with time for walking.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 1800,
+    "daily_budget_max": 5000,
+    "tags": [
+      "Historical",
+      "Photography",
+      "Trekking"
+    ],
+    "avail_start": 274,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "Virupaksha Temple",
+        "category": "Historical",
+        "description": "A major historic temple at the edge of Hampi Bazaar.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Vittala Temple",
+        "category": "Historical",
+        "description": "A celebrated temple complex known for its stone chariot and halls.",
+        "avg_hours": 3,
+        "entry_cost": 40,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Hampi Bazaar",
+        "category": "Historical",
+        "description": "A historic market street near the Virupaksha Temple.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Matanga Hill",
+        "category": "Trekking",
+        "description": "A hilltop viewpoint over the Hampi ruins.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Lotus Mahal",
+        "category": "Historical",
+        "description": "An ornate structure in the Zenana Enclosure area.",
+        "avg_hours": 2,
+        "entry_cost": 40,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 15000,
+    "best_season": "October to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "pondicherry",
+    "name": "Pondicherry",
+    "state": "Puducherry",
+    "description": "Pondicherry is a coastal city with French-influenced streets, beaches, and a distinctive cafe culture. It fits relaxed walks, food, history, and seaside photography.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6000,
+    "tags": [
+      "Beaches",
+      "Historical",
+      "Food",
+      "Shopping",
+      "Photography"
+    ],
+    "avail_start": 274,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "French Quarter",
+        "category": "Historical",
+        "description": "A walkable district with colonial-era streets and colorful buildings.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Promenade Beach",
+        "category": "Beaches",
+        "description": "A seafront promenade along the Bay of Bengal.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Sri Aurobindo Ashram",
+        "category": "Historical",
+        "description": "A spiritual center in the French Quarter.",
+        "avg_hours": 1,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Auroville",
+        "category": "Photography",
+        "description": "An international township near Pondicherry with the Matrimandir area.",
+        "avg_hours": 5,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Pondicherry Museum",
+        "category": "Historical",
+        "description": "A museum with regional archaeological and cultural collections.",
+        "avg_hours": 2,
+        "entry_cost": 20,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 17000,
+    "best_season": "October to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "ooty",
+    "name": "Ooty",
+    "state": "Tamil Nadu",
+    "description": "Ooty is a Nilgiri hill station with gardens, tea country, and a historic mountain railway. It offers a gentle mix of photography, walks, and nature.",
+    "best_months": [
+      3,
+      4,
+      5,
+      10,
+      11
+    ],
+    "avoid_months": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "daily_budget_min": 2200,
+    "daily_budget_max": 6000,
+    "tags": [
+      "Mountains",
+      "Photography",
+      "Wildlife",
+      "Historical"
+    ],
+    "avail_start": 60,
+    "avail_end": 334,
+    "places": [
+      {
+        "name": "Ooty Lake",
+        "category": "Photography",
+        "description": "A central lake used for boating and lakeside walks.",
+        "avg_hours": 2,
+        "entry_cost": 20,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Government Botanical Garden",
+        "category": "Photography",
+        "description": "A large landscaped garden with many highland plants.",
+        "avg_hours": 3,
+        "entry_cost": 50,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Nilgiri Mountain Railway",
+        "category": "Historical",
+        "description": "A historic railway linking the Nilgiri hill towns.",
+        "avg_hours": 6,
+        "entry_cost": 500,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Doddabetta Peak",
+        "category": "Mountains",
+        "description": "The highest peak in the Nilgiri Hills near Ooty.",
+        "avg_hours": 3,
+        "entry_cost": 10,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Emerald Lake",
+        "category": "Photography",
+        "description": "A scenic lake in the quieter Emerald Valley area.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 17000,
+    "best_season": "March to May and October to November",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "delhi",
+    "name": "Delhi",
+    "state": "Delhi",
+    "description": "Delhi is India's capital, combining Mughal monuments, colonial avenues, markets, and a broad food culture. It is a useful base for history, shopping, and urban exploration.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 1800,
+    "daily_budget_max": 5500,
+    "tags": [
+      "Historical",
+      "Food",
+      "Shopping",
+      "Photography"
+    ],
+    "avail_start": 274,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "Red Fort",
+        "category": "Historical",
+        "description": "A major Mughal fort complex in Old Delhi.",
+        "avg_hours": 3,
+        "entry_cost": 35,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Humayun's Tomb",
+        "category": "Historical",
+        "description": "A Mughal garden tomb and architectural landmark.",
+        "avg_hours": 2,
+        "entry_cost": 35,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Qutub Minar",
+        "category": "Historical",
+        "description": "A medieval minaret and surrounding monument complex.",
+        "avg_hours": 2,
+        "entry_cost": 35,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "India Gate",
+        "category": "Photography",
+        "description": "A prominent war memorial on a ceremonial avenue.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Chandni Chowk",
+        "category": "Food",
+        "description": "A historic market district known for street food and commerce.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 15000,
+    "best_season": "October to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "amritsar",
+    "name": "Amritsar",
+    "state": "Punjab",
+    "description": "Amritsar is a historic Punjabi city centered on the Golden Temple and lively old markets. It combines spiritual, historical, and food experiences in a compact visit.",
+    "best_months": [
+      10,
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "daily_budget_min": 1800,
+    "daily_budget_max": 5000,
+    "tags": [
+      "Historical",
+      "Food",
+      "Shopping",
+      "Photography"
+    ],
+    "avail_start": 274,
+    "avail_end": 90,
+    "places": [
+      {
+        "name": "Golden Temple",
+        "category": "Historical",
+        "description": "A major Sikh gurdwara and pilgrimage site surrounding the Amrit Sarovar.",
+        "avg_hours": 3,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Jallianwala Bagh",
+        "category": "Historical",
+        "description": "A memorial garden connected with a major event in India's history.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Wagah-Attari Border",
+        "category": "Historical",
+        "description": "A border ceremony venue west of Amritsar.",
+        "avg_hours": 5,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Partition Museum",
+        "category": "Historical",
+        "description": "A museum documenting memories and stories of Partition.",
+        "avg_hours": 2,
+        "entry_cost": 10,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Hall Bazaar",
+        "category": "Shopping",
+        "description": "A central market for textiles, crafts, and local goods.",
+        "avg_hours": 2,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 15000,
+    "best_season": "October to March",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  },
+  {
+    "slug": "andaman",
+    "name": "Andaman",
+    "state": "Andaman and Nicobar Islands",
+    "description": "The Andaman Islands offer tropical beaches, clear water, and forested island landscapes. They suit beach time, photography, wildlife, and water-based activities.",
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "avoid_months": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "daily_budget_min": 3500,
+    "daily_budget_max": 9000,
+    "tags": [
+      "Beaches",
+      "Wildlife",
+      "Photography",
+      "Trekking"
+    ],
+    "avail_start": 305,
+    "avail_end": 120,
+    "places": [
+      {
+        "name": "Radhanagar Beach",
+        "category": "Beaches",
+        "description": "A well-known beach on Havelock Island with forest behind the shore.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Cellular Jail",
+        "category": "Historical",
+        "description": "A former colonial prison and national memorial in Port Blair.",
+        "avg_hours": 2,
+        "entry_cost": 30,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Elephant Beach",
+        "category": "Beaches",
+        "description": "A Havelock beach associated with snorkeling and water activities.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Baratang Limestone Caves",
+        "category": "Trekking",
+        "description": "A cave excursion reached through the Baratang island area.",
+        "avg_hours": 8,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      },
+      {
+        "name": "Chidiya Tapu",
+        "category": "Photography",
+        "description": "A coastal nature area near Port Blair known for sunsets and birdlife.",
+        "avg_hours": 4,
+        "entry_cost": 0,
+        "lat": null,
+        "lon": null,
+        "verified": false,
+        "source_note": "needs review"
+      }
+    ],
+    "cost": 35000,
+    "best_season": "November to April",
+    "lat": null,
+    "lon": null,
+    "verified": false,
+    "source_note": "needs review"
+  }
+]
