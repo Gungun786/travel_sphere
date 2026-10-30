@@ -69,6 +69,48 @@ export interface ApiTrip {
   members: ApiTripMember[];
 }
 
+export interface ApiTopPlace {
+  name: string;
+  note: string;
+}
+
+export interface ApiPlace {
+  id: number;
+  name: string;
+  category: string;
+  description: string;
+  avg_hours: number;
+  entry_cost: number;
+  lat: number | null;
+  lon: number | null;
+  source_note: string | null;
+  verified: boolean;
+}
+
+export interface ApiDestination {
+  name: string;
+  slug: string | null;
+  state: string | null;
+  description: string | null;
+  best_season: string | null;
+  top_places: ApiTopPlace[];
+  daily_budget_min: number | null;
+  daily_budget_max: number | null;
+  image_url: string | null;
+  best_months: number[];
+  avoid_months: number[];
+  aliases: string[];
+  lat: number | null;
+  lon: number | null;
+  verified: boolean;
+  source_note: string | null;
+  places: ApiPlace[];
+  cost: number;
+  avail_start: number;
+  avail_end: number;
+  tags: string[];
+}
+
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000';
 
@@ -197,6 +239,24 @@ export async function listTrips(): Promise<ApiTrip[]> {
     throw new Error(getBackendError(body, response.status));
   }
   return body as ApiTrip[];
+}
+
+export async function listDestinations(): Promise<ApiDestination[]> {
+  const response = await backendRequest('/api/destinations');
+  const body = await readBackendBody(response);
+  if (!response.ok) {
+    throw new Error(getBackendError(body, response.status));
+  }
+  return body as ApiDestination[];
+}
+
+export async function getDestination(slug: string): Promise<ApiDestination> {
+  const response = await backendRequest(`/api/destinations/${encodeURIComponent(slug)}`);
+  const body = await readBackendBody(response);
+  if (!response.ok) {
+    throw new Error(getBackendError(body, response.status));
+  }
+  return body as ApiDestination;
 }
 
 export async function getTrip(tripId: string): Promise<ApiTrip> {

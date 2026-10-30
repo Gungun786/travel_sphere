@@ -9,7 +9,6 @@ import {
   Wallet,
   CalendarClock,
   ArrowRight,
-  Star,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Header } from '@/components/layout/Header';
@@ -17,9 +16,10 @@ import { TripCard } from '@/components/trip/TripCard';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/store/userStore';
-import { mockDestinations } from '@/data/mockDestinations';
 import { formatINR } from '@/components/trip/shared';
-import { listTrips } from '@/lib/api';
+import { listDestinations, listTrips } from '@/lib/api';
+import { apiDestinationToDestination } from '@/lib/destinations';
+import { destinationImage } from '@/components/trip/destinationImage';
 import { apiTripToTrip } from '@/components/trip/persisted';
 import type { Trip } from '@/types';
 
@@ -28,11 +28,17 @@ export default function Dashboard() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [destinations, setDestinations] = useState<ReturnType<typeof apiDestinationToDestination>[]>([]);
+  const [destinationSearch, setDestinationSearch] = useState('');
+  const [destinationTag, setDestinationTag] = useState('All');
   const [tab, setTab] = useState<'overview' | 'trips' | 'explore'>('overview');
 
   useEffect(() => {
-    listTrips()
-      .then((items) => setTrips(items.map(apiTripToTrip)))
+    Promise.all([listTrips(), listDestinations()])
+      .then(([tripItems, destinationItems]) => {
+        setTrips(tripItems.map(apiTripToTrip));
+        setDestinations(destinationItems.map(apiDestinationToDestination));
+      })
       .catch((reason: unknown) => setError(reason instanceof Error ? reason.message : 'Could not load trips.'))
       .finally(() => setLoading(false));
   }, []);
@@ -43,6 +49,15 @@ export default function Dashboard() {
     { label: 'Group Members', value: String(trips.reduce((total, trip) => total + trip.members.length, 0)), icon: Users, tint: 'bg-success/15 text-success' },
     { label: 'Total Planned Budget', value: formatINR(trips.reduce((total, trip) => total + trip.budget, 0)), icon: Wallet, tint: 'bg-chart-4/15 text-chart-4' },
   ];
+  const destinationTags = Array.from(new Set(destinations.flatMap((destination) => destination.tags))).sort();
+  const filteredDestinations = destinations.filter((destination) => {
+    const query = destinationSearch.trim().toLowerCase();
+    const matchesSearch =
+      !query ||
+      destination.name.toLowerCase().includes(query) ||
+      destination.aliases.some((alias) => alias.toLowerCase().includes(query));
+    return matchesSearch && (destinationTag === 'All' || destination.tags.includes(destinationTag));
+  });
 
   return (
     <AppShell>
@@ -130,24 +145,18 @@ export default function Dashboard() {
                 </button>
               </div>
               <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {mockDestinations.slice(0, 3).map((d) => (
+                {destinations.slice(0, 3).map((d) => (
                   <Card key={d.id} className="group overflow-hidden p-0 transition-all hover:-translate-y-1 hover:shadow-soft-lg">
                     <div className="relative h-48 overflow-hidden">
-                      <img src={d.image} alt={d.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                      <img {...destinationImage(d.slug, d.name)} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-ocean px-2.5 py-1 text-xs font-semibold text-white">
-                        {d.match}% Match
-                      </span>
                       <div className="absolute bottom-3 left-4 text-white">
                         <h3 className="font-display text-lg font-semibold">{d.name}</h3>
-                        <p className="text-sm text-white/80">{formatINR(d.estimatedCost)}</p>
+                        <p className="text-sm text-white/80">{formatINR(d.cost)}</p>
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-4">
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Star className="h-4 w-4 fill-sunset text-sunset" />
-                        {d.rating} · {d.temperature}
-                      </span>
+                      <span className="text-sm text-muted-foreground">{d.bestSeason ?? 'Season unavailable'}</span>
                       <Link href="/create-trip">
                         <Button size="sm" variant="ghost" className="gap-1 text-ocean">
                           Plan here <ArrowRight className="h-3.5 w-3.5" />
@@ -178,15 +187,28 @@ export default function Dashboard() {
 
         {tab === 'explore' && (
           <section className="mt-8">
+            <div className="mb-5 grid gap-3 sm:grid-cols-[1fr_220px]">
+              <input
+                value={destinationSearch}
+                onChange={(event) => setDestinationSearch(event.target.value)}
+                placeholder="Search destinations or aliases"
+                className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus:border-ocean"
+              />
+              <select
+                value={destinationTag}
+                onChange={(event) => setDestinationTag(event.target.value)}
+                className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus:border-ocean"
+              >
+                <option value="All">All interests</option>
+                {destinationTags.map((tag) => <option key={tag}>{tag}</option>)}
+              </select>
+            </div>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {mockDestinations.map((d) => (
+              {filteredDestinations.map((d) => (
                 <Card key={d.id} className="group overflow-hidden p-0 transition-all hover:-translate-y-1 hover:shadow-soft-lg">
                   <div className="relative h-52 overflow-hidden">
-                    <img src={d.image} alt={d.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img {...destinationImage(d.slug, d.name)} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-ocean px-2.5 py-1 text-xs font-semibold text-white">
-                      {d.match}% Match
-                    </span>
                     <div className="absolute bottom-3 left-4 right-4 text-white">
                       <h3 className="font-display text-lg font-semibold">{d.name}</h3>
                       <p className="text-sm text-white/80">{d.state}</p>
@@ -194,8 +216,8 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-2 p-4">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">{formatINR(d.estimatedCost)}</span>
-                      <span className="flex items-center gap-1"><Star className="h-4 w-4 fill-sunset text-sunset" />{d.rating}</span>
+                      <span className="text-muted-foreground">{formatINR(d.cost)}</span>
+                      <span className="text-muted-foreground">{d.bestSeason ?? 'Season unavailable'}</span>
                     </div>
                     <Link href="/create-trip">
                       <Button size="sm" className="w-full">Plan a trip here</Button>

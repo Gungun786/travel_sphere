@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { ArrowRight, Check, Sparkles, Heart } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Header } from '@/components/layout/Header';
@@ -9,14 +10,24 @@ import { MemberCard } from '@/components/trip/MemberCard';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { mockDestinations } from '@/data/mockDestinations';
 import { formatINR } from '@/components/trip/shared';
 import { useParams } from 'next/navigation';
 import { usePersistedTrip } from '@/components/trip/persisted';
+import { getDestination } from '@/lib/api';
+import type { ApiDestination } from '@/lib/api';
+import { destinationImage } from '@/components/trip/destinationImage';
 
 export default function GroupPreferences() {
   const params = useParams<{ tripId: string }>();
   const { trip, loading, error } = usePersistedTrip(params.tripId);
+  const [destination, setDestination] = useState<ApiDestination | null>(null);
+  useEffect(() => {
+    if (trip?.destinationName && trip.destinationName !== 'To be decided') {
+      getDestination(trip.destinationName.toLowerCase().replace(/\s+/g, '-'))
+        .then(setDestination)
+        .catch(() => setDestination(null));
+    }
+  }, [trip?.destinationName]);
   if (loading) return <PageMessage message="Loading trip…" />;
   if (error || !trip) return <PageMessage message={error?.message ?? 'Trip not found.'} />;
   const members = trip.members;
@@ -33,10 +44,6 @@ export default function GroupPreferences() {
     { label: 'Nightlife vs Relaxation', a: 'Nightlife', b: 'Relaxation', aCount: members.filter((m) => m.travelStyle === 'Nightlife').length, bCount: members.filter((m) => m.travelStyle === 'Relaxed').length },
     { label: 'Adventure vs Leisure', a: 'Adventure', b: 'Leisure', aCount: members.filter((m) => m.travelStyle === 'Adventure').length, bCount: members.filter((m) => m.travelStyle === 'Relaxed' || m.travelStyle === 'Luxury').length },
   ];
-
-  const bestMatch =
-    mockDestinations.find((destination) => destination.name === trip.destinationName) ??
-    mockDestinations[0];
 
   return (
     <AppShell>
@@ -122,32 +129,30 @@ export default function GroupPreferences() {
           </Card>
 
           {/* Best match */}
-          <Card className="mt-8 overflow-hidden p-0">
+          {destination && <Card className="mt-8 overflow-hidden p-0">
             <div className="grid md:grid-cols-2">
               <div className="relative h-64 md:h-auto">
-                <img src={bestMatch.image} alt={bestMatch.name} className="h-full w-full object-cover" />
+                <img {...destinationImage(destination.slug ?? '', destination.name)} className="h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent md:bg-gradient-to-r" />
                 <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-ocean px-3 py-1 text-xs font-semibold text-white">
                   <Sparkles className="h-3.5 w-3.5" /> Best Match
                 </span>
               </div>
               <div className="p-6 md:p-8">
-                <h2 className="font-display text-2xl font-bold">{bestMatch.name}</h2>
-                <p className="mt-1 text-muted-foreground">{bestMatch.state}</p>
+                <h2 className="font-display text-2xl font-bold">{destination.name}</h2>
+                <p className="mt-1 text-muted-foreground">{destination.state}</p>
                 <p className="mt-4 text-sm leading-relaxed text-foreground/90">
-                  Strong match for your group’s interests, budget, preferred activities, and travel style. {bestMatch.description}
+                  {destination.description}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {bestMatch.activities.map((a) => (
+                  {destination.tags.map((a) => (
                     <Badge key={a} variant="secondary" className="font-normal">{a}</Badge>
                   ))}
                 </div>
                 <div className="mt-5 flex items-center gap-4 text-sm text-muted-foreground">
-                  <span>{formatINR(bestMatch.estimatedCost)} estimated</span>
+                  <span>{formatINR(destination.cost)} estimated</span>
                   <span>·</span>
-                  <span>{bestMatch.temperature}</span>
-                  <span>·</span>
-                  <span>{bestMatch.match}% match</span>
+                  <span>{destination.best_season ?? 'Season unavailable'}</span>
                 </div>
                 <div className="mt-6 flex gap-2">
                   <Link href={`/trip/${trip.id}/destination`}>
@@ -157,7 +162,7 @@ export default function GroupPreferences() {
                 </div>
               </div>
             </div>
-          </Card>
+          </Card>}
         </div>
       </main>
     </AppShell>

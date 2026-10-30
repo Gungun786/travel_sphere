@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getTrip, type ApiTrip } from '@/lib/api';
-import { mockDestinations } from '@/data/mockDestinations';
 import type { Member, Trip, TravelStyle } from '@/types';
 
 export function inclusiveDays(start: string, end: string): number {
@@ -15,7 +14,6 @@ export function inclusiveDays(start: string, end: string): number {
 export function apiTripToTrip(apiTrip: ApiTrip): Trip {
   const optimizedDestination = apiTrip.optimizer_result?.chosen ?? null;
   const destinationName = apiTrip.destination ?? optimizedDestination ?? 'To be decided';
-  const destination = mockDestinations.find((item) => item.name === destinationName);
   const members: Member[] = apiTrip.members.map((member, index) => ({
     id: String(member.id),
     name: member.name,
@@ -33,8 +31,8 @@ export function apiTripToTrip(apiTrip: ApiTrip): Trip {
     id: String(apiTrip.id),
     name: apiTrip.name,
     destinationName,
-    destinationId: destination?.id ?? null,
-    image: destination?.image ?? '',
+    destinationId: destinationName === 'To be decided' ? null : destinationName.toLowerCase().replace(/\s+/g, '-'),
+    image: destinationName === 'To be decided' ? '' : `/destinations/${destinationName.toLowerCase().replace(/\s+/g, '-')}.jpg`,
     startDate: apiTrip.date_start,
     endDate: apiTrip.date_end,
     days: inclusiveDays(apiTrip.date_start, apiTrip.date_end),
@@ -58,6 +56,14 @@ export function usePersistedTrip(tripId: string) {
 
   useEffect(() => {
     let active = true;
+    if (!/^[1-9]\d*$/.test(tripId)) {
+      setTrip(null);
+      setError(new Error('Trip not found.'));
+      setLoading(false);
+      return () => {
+        active = false;
+      };
+    }
     setLoading(true);
     setError(null);
     getTrip(tripId)

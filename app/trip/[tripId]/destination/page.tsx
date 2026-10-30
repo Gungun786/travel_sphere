@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { X, Check, Star, GitCompare } from 'lucide-react';
+import { X, Check, GitCompare } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Header } from '@/components/layout/Header';
 import { TripHero } from '@/components/trip/TripHero';
@@ -11,35 +11,41 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useTripStore } from '@/store/tripStore';
-import { mockDestinations } from '@/data/mockDestinations';
 import type { Destination } from '@/types';
 import { toast } from 'sonner';
 import { formatINR } from '@/components/trip/shared';
 import { usePersistedTrip } from '@/components/trip/persisted';
-import { optimizeTrip, updateTrip, type OptimizeResult } from '@/lib/api';
+import { listDestinations, optimizeTrip, updateTrip, type OptimizeResult } from '@/lib/api';
+import { apiDestinationToDestination } from '@/lib/destinations';
+import { destinationImage } from '@/components/trip/destinationImage';
 
 const filters = [
   { key: 'budget', label: 'Budget', options: ['Any', 'Budget', 'Mid-range', 'Premium'] },
-  { key: 'weather', label: 'Weather', options: ['Any', 'Warm', 'Mild', 'Cool'] },
-  { key: 'style', label: 'Travel style', options: ['Any', 'Nature', 'Adventure', 'Cultural', 'Relaxed'] },
-  { key: 'season', label: 'Season', options: ['Any', 'Winter', 'Summer', 'Monsoon'] },
+  { key: 'style', label: 'Tag', options: ['Any', 'Nature', 'Adventure', 'Cultural', 'Relaxed'] },
+  { key: 'season', label: 'Best season', options: ['Any', 'Winter', 'Summer', 'Monsoon'] },
 ];
 
 const compareMetrics = [
-  { key: 'budget', label: 'Budget', getVal: (d: Destination) => formatINR(d.estimatedCost), max: 70000, getNum: (d: Destination) => d.estimatedCost },
-  { key: 'weather', label: 'Weather', getVal: (d: Destination) => d.temperature, max: 35, getNum: (d: Destination) => parseInt(d.temperature) },
-  { key: 'activities', label: 'Activities', getVal: (d: Destination) => `${d.activities.length} options`, max: 6, getNum: (d: Destination) => d.activities.length },
-  { key: 'food', label: 'Food scene', getVal: (d: Destination) => d.activities.includes('Food') ? 'Excellent' : 'Good', max: 1, getNum: (d: Destination) => d.activities.includes('Food') ? 1 : 0.5 },
-  { key: 'nature', label: 'Nature', getVal: (d: Destination) => d.travelStyle.includes('Nature') ? 'High' : 'Medium', max: 1, getNum: (d: Destination) => d.travelStyle.includes('Nature') ? 1 : 0.5 },
-  { key: 'culture', label: 'Culture', getVal: (d: Destination) => d.travelStyle.includes('Cultural') ? 'High' : 'Medium', max: 1, getNum: (d: Destination) => d.travelStyle.includes('Cultural') ? 1 : 0.5 },
-  { key: 'traveltime', label: 'Travel time', getVal: (d: Destination) => '3–5 hrs', max: 1, getNum: () => 0.8 },
-  { key: 'overall', label: 'Overall suitability', getVal: (d: Destination) => `${d.match}%`, max: 100, getNum: (d: Destination) => d.match },
+  { key: 'budget', label: 'Estimated cost', getVal: (d: Destination) => formatINR(d.cost), max: 70000, getNum: (d: Destination) => d.cost },
+  { key: 'season', label: 'Best season', getVal: (d: Destination) => d.bestSeason ?? 'Unavailable', max: 1, getNum: () => 1 },
+  { key: 'places', label: 'Top places', getVal: (d: Destination) => `${d.topPlaces.length} places`, max: 5, getNum: (d: Destination) => d.topPlaces.length },
+  { key: 'tags', label: 'Tags', getVal: (d: Destination) => d.tags.slice(0, 3).join(', '), max: 3, getNum: (d: Destination) => Math.min(d.tags.length, 3) },
 ];
 
 export default function DestinationRecommendation() {
   const selectDestination = useTripStore((s) => s.selectDestination);
   const params = useParams<{ tripId: string }>();
   const { trip, loading, error } = usePersistedTrip(params.tripId);
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+
+  useEffect(() => {
+    if (!/^[1-9]\d*$/.test(params.tripId)) {
+      return;
+    }
+    listDestinations()
+      .then((items) => setDestinations(items.map(apiDestinationToDestination)))
+      .catch(() => setDestinations([]));
+  }, [params.tripId]);
 
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string>>(
     Object.fromEntries(filters.map((f) => [f.key, 'Any']))
@@ -54,7 +60,7 @@ export default function DestinationRecommendation() {
   if (error || !trip) return <PageMessage message={error?.message ?? 'Trip not found.'} />;
 
   const suggestedDestination = suggestion ? suggestion.chosen : trip.destinationName;
-  const suggestedDestinationData = mockDestinations.find(
+  const suggestedDestinationData = destinations.find(
     (destination) => destination.name === suggestedDestination
   );
 
@@ -110,7 +116,7 @@ export default function DestinationRecommendation() {
   };
 
   const onSelect = (d: Destination) => {
-    selectDestination(d.id, d.name, d.image, d.estimatedCost);
+    selectDestination(d.id, d.name, d.image, d.cost);
     toast.success(`${d.name} selected as your destination.`);
   };
 
@@ -129,8 +135,7 @@ export default function DestinationRecommendation() {
             <Card className="mt-6 p-5">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                 <img
-                  src={suggestedDestinationData.image}
-                  alt={suggestedDestinationData.name}
+                  {...destinationImage(suggestedDestinationData.slug, suggestedDestinationData.name)}
                   className="h-28 w-full rounded-lg object-cover sm:w-44"
                 />
                 <div className="flex-1">
@@ -191,7 +196,7 @@ export default function DestinationRecommendation() {
 
           {/* Destination grid */}
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {mockDestinations.map((d) => (
+            {destinations.map((d) => (
               <DestinationCard
                 key={d.id}
                 destination={d}
@@ -199,6 +204,34 @@ export default function DestinationRecommendation() {
                 onSelect={onSelect}
               />
             ))}
+          </div>
+          <div className="mt-8 space-y-6">
+            {Array.from(
+              new Set(destinations.flatMap((destination) => destination.places.map((place) => place.category)))
+            ).map((category) => {
+              const places = destinations.flatMap((destination) =>
+                destination.places
+                  .filter((place) => place.category === category)
+                  .map((place) => ({ ...place, destinationName: destination.name }))
+              );
+              return (
+                <section key={category}>
+                  <h2 className="font-display text-xl font-semibold">{category}</h2>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {places.map((place) => (
+                      <Card key={`${place.destinationName}-${place.id}`} className="p-4">
+                        <p className="text-xs uppercase tracking-wide text-muted-foreground">{place.destinationName}</p>
+                        <h3 className="mt-1 font-semibold">{place.name}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground">{place.description}</p>
+                        <p className="mt-3 text-xs text-muted-foreground">
+                          {place.avgHours} hours · {formatINR(place.entryCost)} entry
+                        </p>
+                      </Card>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
           </div>
         </div>
       </main>
@@ -239,10 +272,10 @@ function CompareModal({ destinations, onClose, onSelect }: { destinations: Desti
                 {destinations.map((d) => (
                   <th key={d.id} className="p-3 text-left">
                     <div className="flex items-center gap-2">
-                      <img src={d.image} alt={d.name} className="h-10 w-10 rounded-lg object-cover" />
+                      <img {...destinationImage(d.slug, d.name)} className="h-10 w-10 rounded-lg object-cover" />
                       <div>
                         <p className="font-display font-semibold">{d.name}</p>
-                        <p className="text-xs text-muted-foreground">{d.match}% match</p>
+                        <p className="text-xs text-muted-foreground">{d.bestSeason ?? 'Season unavailable'}</p>
                       </div>
                     </div>
                   </th>

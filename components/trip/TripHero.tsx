@@ -5,6 +5,7 @@ import { Share2, Pencil, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Trip } from '@/types';
 import { formatDateRange } from './shared';
+import { destinationImage } from './destinationImage';
 
 const subNav = [
   { label: 'Overview', segment: '' },
@@ -19,8 +20,11 @@ export function TripHero({ trip, active }: { trip: Trip; active: string }) {
   return (
     <div className="relative">
       <div className="relative h-56 w-full overflow-hidden md:h-72">
-        {trip.image ? (
-          <img src={trip.image} alt={trip.destinationName} className="h-full w-full object-cover" />
+        {trip.destinationName !== 'To be decided' ? (
+          <img
+            {...destinationImage(trip.destinationName.toLowerCase().replace(/\s+/g, '-'), trip.destinationName)}
+            className="h-full w-full object-cover"
+          />
         ) : (
           <div className="h-full w-full bg-gradient-to-br from-ocean/80 to-sunset/70" />
         )}

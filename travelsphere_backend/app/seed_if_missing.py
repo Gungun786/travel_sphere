@@ -37,6 +37,14 @@ def seed_if_missing() -> None:
             db.add(
                 Destination(
                     name=destination.name,
+                    slug=destination.slug,
+                    state=destination.state,
+                    description=destination.description,
+                    best_season=destination.best_season,
+                    top_places=destination.top_places,
+                    daily_budget_min=destination.daily_budget_min,
+                    daily_budget_max=destination.daily_budget_max,
+                    image_url=destination.image_url,
                     cost=destination.cost,
                     avail_start=destination.avail_start,
                     avail_end=destination.avail_end,
