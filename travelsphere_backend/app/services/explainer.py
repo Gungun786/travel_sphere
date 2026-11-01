@@ -4,6 +4,7 @@ from app.core.config import GEMINI_API_KEY
 
 
 client = genai.Client(api_key=GEMINI_API_KEY)
+GEMINI_MODEL = "gemini-3.6-flash"
 
 
 def generate_explanation(
@@ -34,7 +35,7 @@ Be specific and warm, like you're texting the group chat."""
 
     try:
         response = client.models.generate_content(
-            model="gemini-3.6-flash",
+            model=GEMINI_MODEL,
             contents=prompt,
         )
     except Exception:
@@ -44,3 +45,17 @@ Be specific and warm, like you're texting the group chat."""
         )
 
     return response.text or "The destination was selected based on the group constraints."
+
+
+def generate_comparison_explanation(facts: dict, best_per_row: dict) -> str:
+    prompt = f"""Compare these destinations for a travel group using only the supplied facts.
+Do not introduce ratings, temperatures, prices, or any other numbers not present in the facts.
+Recommend one option for this group and state the main trade-off. Use at most 120 words.
+
+Facts: {facts}
+Best values by row: {best_per_row}"""
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=prompt,
+    )
+    return response.text or ""

@@ -24,12 +24,16 @@ export function DestinationCard({
   onCompare,
   onSelect,
   compareable = true,
+  comparing = false,
+  photoCredit,
   fit,
 }: {
   destination: Destination;
   onCompare?: (d: Destination) => void;
   onSelect?: (d: Destination) => void;
   compareable?: boolean;
+  comparing?: boolean;
+  photoCredit?: string;
   fit?: DestinationFit;
 }) {
   const tags = normalizeTags(destination.tags);
@@ -47,6 +51,11 @@ export function DestinationCard({
           {...destinationImage(destination.slug, destination.name)}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        {photoCredit && (
+          <p className="absolute bottom-1 right-2 text-[10px] text-white/80">
+            {photoCredit}
+          </p>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
         <div className="absolute bottom-3 left-4 right-4 text-white">
           <h3 className="font-display text-xl font-semibold leading-tight">
@@ -122,7 +131,7 @@ export function DestinationCard({
               className="flex-1"
               onClick={() => onCompare?.(destination)}
             >
-              Compare
+              {comparing ? 'Remove' : 'Compare'}
             </Button>
           )}
           <Button
