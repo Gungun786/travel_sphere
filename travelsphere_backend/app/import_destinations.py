@@ -32,6 +32,15 @@ DESTINATION_FIELDS = (
     "tags",
 )
 
+def normalize_tags(value: object) -> str:
+    values = value if isinstance(value, list) else str(value or "").split(",")
+    tags = []
+    for item in values:
+        tag = str(item).strip().strip("{}").strip("\"'")
+        if tag and tag not in tags:
+            tags.append(tag)
+    return ",".join(tags)
+
 
 def import_destinations() -> tuple[int, int]:
     records = json.loads(DATA_PATH.read_text(encoding="utf-8"))
@@ -50,7 +59,7 @@ def import_destinations() -> tuple[int, int]:
             )
             if destination is None:
                 values = {
-                    field: record[field]
+                    field: normalize_tags(record[field]) if field == "tags" else record[field]
                     for field in DESTINATION_FIELDS
                     if field in record
                 }
@@ -64,7 +73,8 @@ def import_destinations() -> tuple[int, int]:
                 place_records = record.get("places", [])
                 for field in DESTINATION_FIELDS:
                     if field in record and getattr(destination, field) is None:
-                        setattr(destination, field, record[field])
+                        value = normalize_tags(record[field]) if field == "tags" else record[field]
+                        setattr(destination, field, value)
 
             for place_record in place_records:
                 existing_place = (

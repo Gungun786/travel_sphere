@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatINR } from '@/components/trip/shared';
+import { normalizeTags } from '@/lib/tags';
 import { useParams } from 'next/navigation';
 import { usePersistedTrip } from '@/components/trip/persisted';
 import { getDestination } from '@/lib/api';
@@ -145,7 +146,7 @@ export default function GroupPreferences() {
                   {destination.description}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {destination.tags.map((a) => (
+                  {normalizeTags(destination.tags).map((a) => (
                     <Badge key={a} variant="secondary" className="font-normal">{a}</Badge>
                   ))}
                 </div>

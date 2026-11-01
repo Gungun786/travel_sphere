@@ -6,7 +6,7 @@ import { X, Check, GitCompare } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Header } from '@/components/layout/Header';
 import { TripHero } from '@/components/trip/TripHero';
-import { DestinationCard } from '@/components/trip/DestinationCard';
+import { DestinationCard, type DestinationFit } from '@/components/trip/DestinationCard';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +18,8 @@ import { usePersistedTrip } from '@/components/trip/persisted';
 import { listDestinations, optimizeTrip, updateTrip, type OptimizeResult } from '@/lib/api';
 import { apiDestinationToDestination } from '@/lib/destinations';
 import { destinationImage } from '@/components/trip/destinationImage';
+import { dayOfYear, rangesOverlap } from '@/lib/dates';
+import { normalizeTags } from '@/lib/tags';
 
 const filters = [
   { key: 'budget', label: 'Budget', options: ['Any', 'Budget', 'Mid-range', 'Premium'] },
@@ -26,10 +28,10 @@ const filters = [
 ];
 
 const compareMetrics = [
-  { key: 'budget', label: 'Estimated cost', getVal: (d: Destination) => formatINR(d.cost), max: 70000, getNum: (d: Destination) => d.cost },
-  { key: 'season', label: 'Best season', getVal: (d: Destination) => d.bestSeason ?? 'Unavailable', max: 1, getNum: () => 1 },
-  { key: 'places', label: 'Top places', getVal: (d: Destination) => `${d.topPlaces.length} places`, max: 5, getNum: (d: Destination) => d.topPlaces.length },
-  { key: 'tags', label: 'Tags', getVal: (d: Destination) => d.tags.slice(0, 3).join(', '), max: 3, getNum: (d: Destination) => Math.min(d.tags.length, 3) },
+  { key: 'budget', label: 'Estimated cost', getVal: (d: Destination) => formatINR(d.cost) },
+  { key: 'season', label: 'Best season', getVal: (d: Destination) => d.bestSeason ?? 'Unavailable' },
+  { key: 'places', label: 'Top places', getVal: (d: Destination) => `${d.topPlaces.length} places` },
+  { key: 'tags', label: 'Tags', getVal: (d: Destination) => normalizeTags(d.tags).slice(0, 3).join(', ') },
 ];
 
 export default function DestinationRecommendation() {
@@ -64,13 +66,6 @@ export default function DestinationRecommendation() {
     (destination) => destination.name === suggestedDestination
   );
 
-  const toDayNumber = (value: string): number => {
-    const [year, month, day] = value.split('-').map(Number);
-    const date = new Date(Date.UTC(year, month - 1, day));
-    const startOfYear = new Date(Date.UTC(year, 0, 1));
-    return Math.floor((date.getTime() - startOfYear.getTime()) / 86400000) + 1;
-  };
-
   const vetoDestination = async (travelerId: string) => {
     if (!suggestedDestination || suggestedDestination === 'To be decided') return;
 
@@ -83,8 +78,8 @@ export default function DestinationRecommendation() {
             member.name,
             {
               budget_max: member.budgetPerPerson,
-              date_start: toDayNumber(trip.startDate),
-              date_end: toDayNumber(trip.endDate),
+              date_start: dayOfYear(trip.startDate),
+              date_end: dayOfYear(trip.endDate),
               interests: member.interests,
             },
           ])
@@ -119,6 +114,60 @@ export default function DestinationRecommendation() {
     selectDestination(d.id, d.name, d.image, d.cost);
     toast.success(`${d.name} selected as your destination.`);
   };
+
+  const tripStart = dayOfYear(trip.startDate);
+  const tripEnd = dayOfYear(trip.endDate);
+  const destinationsWithFit = destinations.map((destination) => {
+    const tags = normalizeTags(destination.tags);
+    const matchingTags = tags.filter((tag) =>
+      trip.members.some((member) =>
+        member.interests.some((interest) => interest.toLowerCase() === tag.toLowerCase())
+      )
+    );
+    const overBudgetCount = trip.members.filter(
+      (member) => destination.cost > member.budgetPerPerson
+    ).length;
+    const fit: DestinationFit = {
+      dateFits: rangesOverlap(
+        tripStart,
+        tripEnd,
+        destination.availStart,
+        destination.availEnd
+      ),
+      budgetFits: overBudgetCount === 0,
+      overBudgetCount,
+      memberCount: trip.members.length,
+      matchingTags,
+      chosenByOptimizer:
+        trip.decideLater && trip.destinationName === destination.name,
+      optimizerExplanation:
+        trip.decideLater && trip.destinationName === destination.name
+          ? trip.optimizerExplanation
+          : null,
+    };
+    return { destination, fit };
+  });
+  const filteredDestinations = destinationsWithFit
+    .filter(({ destination }) => {
+      const budgetFilter = selectedFilters.budget;
+      const styleFilter = selectedFilters.style;
+      const seasonFilter = selectedFilters.season;
+      const matchesBudget =
+        budgetFilter === 'Any' ||
+        (budgetFilter === 'Budget' && destination.cost <= 20000) ||
+        (budgetFilter === 'Mid-range' && destination.cost > 20000 && destination.cost <= 40000) ||
+        (budgetFilter === 'Premium' && destination.cost > 40000);
+      const matchesStyle =
+        styleFilter === 'Any' || normalizeTags(destination.tags).includes(styleFilter);
+      const matchesSeason =
+        seasonFilter === 'Any' || destination.bestSeason?.includes(seasonFilter);
+      return matchesBudget && matchesStyle && matchesSeason;
+    })
+    .sort(
+      (a, b) =>
+        Number(b.fit.dateFits && b.fit.budgetFits) -
+        Number(a.fit.dateFits && a.fit.budgetFits)
+    );
 
   return (
     <AppShell>
@@ -196,15 +245,19 @@ export default function DestinationRecommendation() {
 
           {/* Destination grid */}
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {destinations.map((d) => (
+            {filteredDestinations.map(({ destination: d, fit }) => (
               <DestinationCard
                 key={d.id}
                 destination={d}
+                fit={fit}
                 onCompare={toggleCompare}
                 onSelect={onSelect}
               />
             ))}
           </div>
+          <p className="mt-6 text-center text-xs text-muted-foreground">
+            Costs and seasons are estimates from curated data.
+          </p>
           <div className="mt-8 space-y-6">
             {Array.from(
               new Set(destinations.flatMap((destination) => destination.places.map((place) => place.category)))
@@ -287,14 +340,9 @@ function CompareModal({ destinations, onClose, onSelect }: { destinations: Desti
                 <tr key={m.key} className="border-t border-border">
                   <td className="p-3 font-medium text-muted-foreground">{m.label}</td>
                   {destinations.map((d) => {
-                    const num = m.getNum(d);
-                    const pct = Math.min((num / m.max) * 100, 100);
                     return (
                       <td key={d.id} className="p-3">
                         <p className="font-medium">{m.getVal(d)}</p>
-                        <div className="mt-1.5 h-1.5 w-full rounded-full bg-muted">
-                          <div className="h-1.5 rounded-full bg-ocean" style={{ width: `${pct}%` }} />
-                        </div>
                       </td>
                     );
                   })}

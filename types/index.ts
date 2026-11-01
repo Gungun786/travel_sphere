@@ -126,6 +126,8 @@ export interface Destination {
   state: string | null;
   image: string;
   cost: number;
+  availStart: number;
+  availEnd: number;
   bestSeason: string | null;
   tags: string[];
   topPlaces: { name: string; note: string }[];
