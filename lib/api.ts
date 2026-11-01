@@ -111,6 +111,49 @@ export interface ApiDestination {
   tags: string[];
 }
 
+export interface CompareMemberMatch {
+  member: string;
+  matches: boolean;
+  shared_tags: string[];
+}
+
+export interface CompareDestinationFacts {
+  slug: string;
+  name: string;
+  estimated_cost: number | null;
+  date_fit: boolean | null;
+  budget_fit: {
+    fit_count: number;
+    total_members: number;
+  } | null;
+  interest_match: {
+    matched_members: number;
+    total_members: number;
+    shared_tags: string[];
+    per_member: CompareMemberMatch[];
+  } | null;
+  best_season: string | null;
+  top_places: string[];
+}
+
+export interface CompareResult {
+  destinations: CompareDestinationFacts[];
+  best_per_row: {
+    estimated_cost: string | null;
+    date_fit: string | null;
+    budget_fit: string | null;
+    interest_match: string | null;
+    best_season: string | null;
+    top_places: string | null;
+  };
+  summary: string | null;
+}
+
+export interface CompareRequest {
+  slugs: string[];
+  explain?: boolean;
+}
+
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000';
 
@@ -283,4 +326,22 @@ export async function updateTrip(
     throw new Error(getBackendError(body, response.status));
   }
   return body as ApiTrip;
+}
+
+export async function getCompare(
+  tripId: string,
+  payload: CompareRequest
+): Promise<CompareResult> {
+  const response = await backendRequest(
+    `/api/trips/${encodeURIComponent(tripId)}/compare`,
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }
+  );
+  const body = await readBackendBody(response);
+  if (!response.ok) {
+    throw new Error(getBackendError(body, response.status));
+  }
+  return body as CompareResult;
 }

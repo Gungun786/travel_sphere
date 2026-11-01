@@ -22,6 +22,7 @@ import { apiDestinationToDestination } from '@/lib/destinations';
 import { destinationImage } from '@/components/trip/destinationImage';
 import { apiTripToTrip } from '@/components/trip/persisted';
 import type { Trip } from '@/types';
+import { normalizeTags } from '@/lib/tags';
 
 export default function Dashboard() {
   const user = useUserStore((s) => s.user);
@@ -49,14 +50,14 @@ export default function Dashboard() {
     { label: 'Group Members', value: String(trips.reduce((total, trip) => total + trip.members.length, 0)), icon: Users, tint: 'bg-success/15 text-success' },
     { label: 'Total Planned Budget', value: formatINR(trips.reduce((total, trip) => total + trip.budget, 0)), icon: Wallet, tint: 'bg-chart-4/15 text-chart-4' },
   ];
-  const destinationTags = Array.from(new Set(destinations.flatMap((destination) => destination.tags))).sort();
+  const destinationTags = Array.from(new Set(destinations.flatMap((destination) => normalizeTags(destination.tags)))).sort();
   const filteredDestinations = destinations.filter((destination) => {
     const query = destinationSearch.trim().toLowerCase();
     const matchesSearch =
       !query ||
       destination.name.toLowerCase().includes(query) ||
       destination.aliases.some((alias) => alias.toLowerCase().includes(query));
-    return matchesSearch && (destinationTag === 'All' || destination.tags.includes(destinationTag));
+    return matchesSearch && (destinationTag === 'All' || normalizeTags(destination.tags).includes(destinationTag));
   });
 
   return (

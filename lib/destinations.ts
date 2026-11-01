@@ -1,5 +1,6 @@
 import type { ApiDestination } from './api';
 import type { Destination } from '@/types';
+import { normalizeTags } from './tags';
 
 export function apiDestinationToDestination(
   destination: ApiDestination,
@@ -12,8 +13,10 @@ export function apiDestinationToDestination(
     state: destination.state,
     image: '',
     cost: destination.cost,
+    availStart: destination.avail_start,
+    availEnd: destination.avail_end,
     bestSeason: destination.best_season,
-    tags: destination.tags,
+    tags: normalizeTags(destination.tags),
     topPlaces: destination.top_places,
     description: destination.description,
     aliases: destination.aliases,

@@ -48,3 +48,16 @@ class TripResponse(BaseModel):
     optimizer_result: dict | None
     created_at: datetime
     members: list[TripMemberResponse]
+
+
+class CompareRequest(BaseModel):
+    slugs: list[str] = Field(min_length=2, max_length=3)
+    explain: bool = False
+
+    @model_validator(mode="after")
+    def validate_slugs(self):
+        if len(set(self.slugs)) != len(self.slugs):
+            raise ValueError("slugs must be unique")
+        if any(not slug.strip() for slug in self.slugs):
+            raise ValueError("slugs must not be empty")
+        return self
