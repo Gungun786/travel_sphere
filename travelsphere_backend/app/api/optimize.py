@@ -18,7 +18,9 @@ def normalize_values(values: list[str] | set[str]) -> set[str]:
     for value in values:
         item = value.strip().lower()
 
-        if item.endswith("s") and not item.endswith("ss"):
+        if item.endswith(("ches", "shes", "xes")):
+            item = item[:-2]
+        elif item.endswith("s") and not item.endswith("ss"):
             item = item[:-1]
 
         normalized.add(item)
