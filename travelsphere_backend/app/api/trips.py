@@ -4,9 +4,11 @@ from threading import Lock
 import time
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import or_
 from sqlalchemy.orm import Session, selectinload
 
 from app.core.database import get_db
+from app.core.access import get_trip_for_owner, get_trip_for_viewer
 from app.core.security import get_current_user
 from app.models.destination import Destination
 from app.models.trip import Trip, TripMember
@@ -15,6 +17,7 @@ from app.schemas.trip import CompareRequest
 from app.schemas.trip import (
     TripCreate,
     TripMemberResponse,
+    TripMemberUpdate,
     TripResponse,
     TripUpdate,
 )
@@ -147,7 +150,7 @@ def _allow_explanation(user_id: int) -> bool:
         return True
 
 
-def serialize_trip(trip: Trip) -> TripResponse:
+def serialize_trip(trip: Trip, role: str = "owner") -> TripResponse:
     return TripResponse(
         id=trip.id,
         name=trip.name,
@@ -169,6 +172,7 @@ def serialize_trip(trip: Trip) -> TripResponse:
             )
             for member in trip.members
         ],
+        role=role,
     )
 
 
@@ -207,13 +211,24 @@ def list_trips(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    member_trip_ids = db.query(TripMember.trip_id).filter(
+        TripMember.user_id == user.id
+    )
     trips = (
         db.query(Trip)
-        .filter(Trip.owner_id == user.id)
+        .filter(
+            or_(
+                Trip.owner_id == user.id,
+                Trip.id.in_(member_trip_ids),
+            )
+        )
         .order_by(Trip.created_at.desc())
         .all()
     )
-    return [serialize_trip(trip) for trip in trips]
+    return [
+        serialize_trip(trip, "owner" if trip.owner_id == user.id else "member")
+        for trip in trips
+    ]
 
 
 @router.get("/{trip_id}", response_model=TripResponse)
@@ -222,13 +237,7 @@ def get_trip(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    trip = (
-        db.query(Trip)
-        .filter(Trip.id == trip_id, Trip.owner_id == user.id)
-        .one_or_none()
-    )
-    if trip is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trip not found.")
+    trip = get_trip_for_viewer(db, trip_id, user)
     return serialize_trip(trip)
 
 
@@ -239,18 +248,89 @@ def update_trip(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    trip = (
-        db.query(Trip)
-        .filter(Trip.id == trip_id, Trip.owner_id == user.id)
-        .one_or_none()
-    )
-    if trip is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trip not found.")
+    trip = get_trip_for_owner(db, trip_id, user)
 
     trip.optimizer_result = payload.optimizer_result
     db.commit()
     db.refresh(trip)
     return serialize_trip(trip)
+
+
+@router.patch("/{trip_id}/members/{member_id}", response_model=TripMemberResponse)
+def update_member_preferences(
+    trip_id: int,
+    member_id: int,
+    payload: TripMemberUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    member = (
+        db.query(TripMember)
+        .filter(TripMember.id == member_id, TripMember.trip_id == trip_id)
+        .one_or_none()
+    )
+    if member is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Member not found.")
+
+    trip = get_trip_for_viewer(db, trip_id, user)
+    can_update = member.user_id == user.id or (
+        member.user_id is None and trip.owner_id == user.id
+    )
+    if not can_update:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You cannot update this member's preferences.",
+        )
+
+    if payload.name is not None:
+        member.name = payload.name
+    if payload.budget_per_person is not None:
+        member.budget_per_person = payload.budget_per_person
+    if payload.interests is not None:
+        member.interests = ",".join(payload.interests)
+    db.commit()
+    db.refresh(member)
+    return TripMemberResponse(
+        id=member.id,
+        name=member.name,
+        budget_per_person=member.budget_per_person,
+        interests=[interest for interest in member.interests.split(",") if interest],
+    )
+
+
+@router.delete("/{trip_id}/members/{member_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_member(
+    trip_id: int,
+    member_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    trip = get_trip_for_owner(db, trip_id, user)
+    member = (
+        db.query(TripMember)
+        .filter(TripMember.id == member_id, TripMember.trip_id == trip_id)
+        .one_or_none()
+    )
+    if member is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Member not found.")
+    if member.user_id == trip.owner_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The owner's member row cannot be deleted.",
+        )
+
+    from app.models.trip import TripInvite
+
+    db.query(TripInvite).filter(
+        TripInvite.member_id == member.id,
+        TripInvite.used_at.is_(None),
+    ).delete(synchronize_session=False)
+    db.query(TripInvite).filter(
+        TripInvite.member_id == member.id,
+    ).delete(synchronize_session=False)
+    db.delete(member)
+    db.commit()
+    return None
 
 
 @router.post("/{trip_id}/compare")
@@ -266,14 +346,7 @@ def compare_trip(
             detail="Comparison explanations are limited to 10 per minute.",
         )
 
-    trip = (
-        db.query(Trip)
-        .options(selectinload(Trip.members))
-        .filter(Trip.id == trip_id, Trip.owner_id == user.id)
-        .one_or_none()
-    )
-    if trip is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trip not found.")
+    trip = get_trip_for_viewer(db, trip_id, user)
 
     destinations = (
         db.query(Destination)
