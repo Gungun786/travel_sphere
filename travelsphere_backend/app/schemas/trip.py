@@ -9,6 +9,12 @@ class TripMemberCreate(BaseModel):
     interests: list[str] = Field(default_factory=list)
 
 
+class TripMemberUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=120)
+    budget_per_person: float | None = Field(default=None, ge=0)
+    interests: list[str] | None = None
+
+
 class TripCreate(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     destination: str | None = Field(default=None, max_length=120)
@@ -48,6 +54,7 @@ class TripResponse(BaseModel):
     optimizer_result: dict | None
     created_at: datetime
     members: list[TripMemberResponse]
+    role: str = "owner"
 
 
 class CompareRequest(BaseModel):
@@ -61,3 +68,24 @@ class CompareRequest(BaseModel):
         if any(not slug.strip() for slug in self.slugs):
             raise ValueError("slugs must not be empty")
         return self
+
+
+class TripInviteCreate(BaseModel):
+    member_id: int
+    email: str | None = None
+
+
+class TripInviteCreateResponse(BaseModel):
+    path: str
+    token: str
+
+
+class TripInviteResponse(BaseModel):
+    trip_name: str
+    owner_name: str
+    member_name: str
+    email_locked: bool
+
+
+class TripInviteAcceptResponse(BaseModel):
+    trip_id: int

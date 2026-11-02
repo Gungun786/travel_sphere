@@ -34,8 +34,25 @@ class TripMember(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     trip_id = Column(Integer, ForeignKey("trips.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     name = Column(String(120), nullable=False)
     budget_per_person = Column(Float, nullable=False)
     interests = Column(String, nullable=False, default="")
 
     trip = relationship("Trip", back_populates="members")
+    user = relationship("User")
+
+
+class TripInvite(Base):
+    __tablename__ = "trip_invites"
+
+    id = Column(Integer, primary_key=True, index=True)
+    trip_id = Column(Integer, ForeignKey("trips.id"), nullable=False, index=True)
+    member_id = Column(Integer, ForeignKey("trip_members.id"), nullable=False, index=True)
+    token = Column(String(128), unique=True, nullable=False, index=True)
+    email = Column(String(320), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    used_at = Column(DateTime, nullable=True)
+
+    trip = relationship("Trip")
+    member = relationship("TripMember")
